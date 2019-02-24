@@ -10,8 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
  * Languages
  *
  * @ORM\Table(name="languages")
+ * @ORM\Entity(repositoryClass="App\Repository\LanguagesRepository") to src/Entity/Languages.php
  * @ORM\Entity
- * @ORM\Entity(repositoryClass="App\Repository\LanguagesRepository")
  */
 class Languages
 {

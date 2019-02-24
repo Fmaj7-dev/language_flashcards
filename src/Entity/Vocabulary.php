@@ -2,8 +2,6 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -11,7 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="vocabulary", indexes={@ORM\Index(name="language_a", columns={"language_a"}), @ORM\Index(name="language_b", columns={"language_b"})})
  * @ORM\Entity
- * @ORM\Entity(repositoryClass="App\Repository\VocabularyRepository")
  */
 class Vocabulary
 {
@@ -39,16 +36,16 @@ class Vocabulary
     private $wordB;
 
     /**
-     * @var bool
+     * @var int
      *
-     * @ORM\Column(name="level", type="boolean", nullable=false)
+     * @ORM\Column(name="level", type="smallint", nullable=false)
      */
     private $level;
 
     /**
-     * @var \Languages
+     * @var \Language
      *
-     * @ORM\ManyToOne(targetEntity="Languages")
+     * @ORM\ManyToOne(targetEntity="Language")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="language_a", referencedColumnName="id")
      * })
@@ -56,29 +53,14 @@ class Vocabulary
     private $languageA;
 
     /**
-     * @var \Languages
+     * @var \Language
      *
-     * @ORM\ManyToOne(targetEntity="Languages")
+     * @ORM\ManyToOne(targetEntity="Language")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="language_b", referencedColumnName="id")
      * })
      */
     private $languageB;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Users", mappedBy="vocabulary")
-     */
-    private $user;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->user = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -109,68 +91,41 @@ class Vocabulary
         return $this;
     }
 
-    public function getLevel(): ?bool
+    public function getLevel(): ?int
     {
         return $this->level;
     }
 
-    public function setLevel(bool $level): self
+    public function setLevel(int $level): self
     {
         $this->level = $level;
 
         return $this;
     }
 
-    public function getLanguageA(): ?Languages
+    public function getLanguageA(): ?Language
     {
         return $this->languageA;
     }
 
-    public function setLanguageA(?Languages $languageA): self
+    public function setLanguageA(?Language $languageA): self
     {
         $this->languageA = $languageA;
 
         return $this;
     }
 
-    public function getLanguageB(): ?Languages
+    public function getLanguageB(): ?Language
     {
         return $this->languageB;
     }
 
-    public function setLanguageB(?Languages $languageB): self
+    public function setLanguageB(?Language $languageB): self
     {
         $this->languageB = $languageB;
 
         return $this;
     }
 
-    /**
-     * @return Collection|Users[]
-     */
-    public function getUser(): Collection
-    {
-        return $this->user;
-    }
-
-    public function addUser(Users $user): self
-    {
-        if (!$this->user->contains($user)) {
-            $this->user[] = $user;
-            $user->addVocabulary($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUser(Users $user): self
-    {
-        if ($this->user->contains($user)) {
-            $this->user->removeElement($user);
-            $user->removeVocabulary($this);
-        }
-
-        return $this;
-    }
 
 }

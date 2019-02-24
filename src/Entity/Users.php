@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Users
  *
  * @ORM\Table(name="users", indexes={@ORM\Index(name="native_language", columns={"native_language"})})
- * @ORM\Entity(repositoryClass="App\Repository\UsersRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\UsersRepository") to src/Entity/Users.php
  * @ORM\Entity
  */
 class Users
