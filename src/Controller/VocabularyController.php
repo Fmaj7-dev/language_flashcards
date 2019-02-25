@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 use App\Entity\Vocabulary;
+use App\Entity\Guess;
 
 class VocabularyController extends AbstractController
 {
@@ -18,7 +19,8 @@ class VocabularyController extends AbstractController
   public function random(SessionInterface $session)
   {
     $repository = $this->getDoctrine()->getRepository(Guess::class);
-    $word = $repository->findOneOfTheWorsts(20);
+    //$word = $repository->findOneOfTheWorsts(20);
+    return new Response("test");
 
     /*$repository = $this->getDoctrine()->getRepository(Vocabulary::class);
     $word = $repository->findOneOfTheWorsts(20);
