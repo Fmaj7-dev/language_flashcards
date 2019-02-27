@@ -19,8 +19,10 @@ class VocabularyController extends AbstractController
   public function random(SessionInterface $session)
   {
     $repository = $this->getDoctrine()->getRepository(Guess::class);
-    //$word = $repository->findOneOfTheWorsts(20);
-    return new Response("test");
+    $word = $repository->findOneOfTheWorsts(20);
+    $vocabulary = $word->getVocabulary();
+
+    return new Response($vocabulary->getWordA());
 
     /*$repository = $this->getDoctrine()->getRepository(Vocabulary::class);
     $word = $repository->findOneOfTheWorsts(20);

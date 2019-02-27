@@ -17,7 +17,7 @@ class GuessRepository extends ServiceEntityRepository
     public function findOneOfTheWorsts($n)
     {   
       $qb = $this->createQueryBuilder('w')
-                 ->orderBy('w.a2b_ok - w.a2b_ko', 'ASC')
+                 ->orderBy('w.a2bOk - w.a2bKo', 'ASC')
                  ->setMaxResults($n)
                  ->getQuery();
 
@@ -25,6 +25,6 @@ class GuessRepository extends ServiceEntityRepository
 
       $nth_element = rand(1, sizeof($result));
 
-      return $result[$nth_element - 1]; 
+      return $result[$nth_element - 1];
     }
 }

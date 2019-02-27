@@ -19,6 +19,18 @@ class VocabularyRepository extends ServiceEntityRepository
         parent::__construct($registry, Vocabulary::class);
     }
 
+    public function findFirst()
+    {
+        $qb = $this->createQueryBuilder('w')
+        ->setMaxResults(1)
+        ->getQuery();
+
+        $result = $qb->execute();
+        $vocabulary = $result->getVocabulary();
+
+        return $result;
+    }
+
     // /**
     //  * @return Vocabulary[] Returns an array of Vocabulary objects
     //  */

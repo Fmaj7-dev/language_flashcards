@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Vocabulary
  *
  * @ORM\Table(name="vocabulary", indexes={@ORM\Index(name="language_a", columns={"language_a"}), @ORM\Index(name="language_b", columns={"language_b"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\VocabularyRepository")
  */
 class Vocabulary
 {
