@@ -1,0 +1,30 @@
+{# templates/vocabulary.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Vocabulary{% endblock %}
+
+{% block body %}
+  <div id='origin'> French: {{word}}</div>
+  <script type="text/javascript">
+    function show()
+    {
+      var elem = document.getElementById('reverse');
+      elem.style.visibility = 'visible';
+    }
+  </script>
+
+  <br><br>
+  <button class="button" type="button" onclick="show()">Show</button>
+  <br>
+  <br>
+
+  <button class="button" onclick="window.location.href='{{linkOk}}/{{id}}'">Correct</button>
+  <button class="button" onclick="window.location.href='{{linkKo}}/{{id}}'">Wrong</button>
+
+  <br>
+
+  <button class="button" {%if mode == "worst"%} id="selected" {% endif %} onclick="window.location.href='/setSort/worst'">Sort by Worst</button>
+  <button class="button" {%if mode == "random"%} id="selected" {% endif %} onclick="window.location.href='/setSort/random'">Sort by Random</button>
+  <button class="button" {%if mode == "unknown"%} id="selected" {% endif %} onclick="window.location.href='/setSort/unknown'">Sort by Unknown</button>
+
+{% endblock %}

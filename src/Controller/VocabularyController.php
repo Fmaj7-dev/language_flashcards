@@ -18,37 +18,48 @@ class VocabularyController extends AbstractController
   */
   public function random(SessionInterface $session)
   {
-    $repository = $this->getDoctrine()->getRepository(Guess::class);
-    $word = $repository->findOneOfTheWorsts(20);
-    $vocabulary = $word->getVocabulary();
-
-    return new Response($vocabulary->getWordA());
-
-    /*$repository = $this->getDoctrine()->getRepository(Vocabulary::class);
-    $word = $repository->findOneOfTheWorsts(20);
+    $repository = $this->getDoctrine()->getRepository( Guess::class );
 
     $mode = $session->get('mode');
 
-    //return new Response('Check out this great word: '.$word->getFrench());
+    if($mode == "worst")
+    {
+      $guess = $repository->findOneOfTheWorsts(1);
+    }
+    else if($mode == "random")
+    {
+      $guess = $repository->findOneRandom();
+    }
+    else if($mode == "unknown")
+    {
+      $guess = $repository->findOneOfTheUnknown(1);
+    }
+    else
+    {
+      return ("mode not set");
+    }
+    $vocabulary = $guess->getVocabulary();
+  
     return $this->render('vocabulary.html.twig', 
-                        ['word' => $word->getFrench(),
-                         'id' => $word->getId(),
-                         'linkOk' => 'f2sok',
-                         'linkKo' => 'f2sko',
-                         'mode' => $mode]);*/
+                        ['word' => $vocabulary->getWordA(),
+                         'id' => $guess->getId(),
+                         'linkOk' => 'a2bok',
+                         'linkKo' => 'b2ako',
+                         'mode' => $mode]);
+    
   }
 
-  /**
-  * @Route("/f2sok/{id}")
+  /** 
+  * @Route("/a2bok/{id}")
   */
-  public function f2sok($id)
+  public function a2bok($id)
   {
     /*$entityManager = $this->getDoctrine()->getManager();
     $word = $entityManager->getRepository(Vocabulary::class)->find($id);
 
     if (!$word) {
       throw $this->createNotFoundException('No word found for id '.$id);
-    }
+    }   
 
     $word->incF2sOk();
     $entityManager->flush();
@@ -59,7 +70,7 @@ class VocabularyController extends AbstractController
   /**
   * @Route("/f2sko/{id}")
   */
-  public function s2fok($id)
+  public function b2aok($id)
   {
     /*$entityManager = $this->getDoctrine()->getManager();
     $word = $entityManager->getRepository(Vocabulary::class)->find($id);

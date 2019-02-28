@@ -1,12 +1,20 @@
+{# templates/base.html.twig #}
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        <link rel="stylesheet" href="style.css">
+        <div class="navbar">
+        <a href="vocabulaire.php">Vocabulaire</a>
+        <a href="verbs.php">Verbs</a>
+        <a href="stats.php">Stats</a>
+        </div>
+        <title>{% block title %}{% endblock %}</title>
     </head>
     <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+        <div id="content">
+        <br>
+            {% block body %}{% endblock %}
+        </div>
     </body>
 </html>
