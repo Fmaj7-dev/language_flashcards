@@ -15,10 +15,16 @@ class GuessRepository extends ServiceEntityRepository
         parent::__construct($registry, Guess::class);
     }
 
-    public function findOneOfTheWorsts($n)
+    public function findOneOfTheWorsts($n, $langQuery)
     {   
+      $orderBy = '';
+      if($langQuery == 'langA')
+        $orderBy = 'w.a2bOk - w.a2bKo';
+      if($langQuery == 'langB')
+        $orderBy = 'w.b2aOk - w.b2aKo';
+
       $qb = $this->createQueryBuilder('w')
-                 ->orderBy('w.a2bOk - w.a2bKo', 'ASC')
+                 ->orderBy($orderBy, 'ASC')
                  ->setMaxResults($n)
                  ->getQuery();
 
@@ -29,10 +35,16 @@ class GuessRepository extends ServiceEntityRepository
       return $result[$nth_element - 1];
     }
 
-    public function findOneOfTheUnknown($n)
+    public function findOneOfTheUnknown($n, $langQuery)
     {   
+      $orderBy = '';
+      if($langQuery == 'langA')
+        $orderBy = 'w.a2bOk + w.a2bKo';
+      if($langQuery == 'langB')
+        $orderBy = 'w.b2aOk + w.b2aKo';
+
       $qb = $this->createQueryBuilder('w')
-                 ->orderBy('w.a2bOk + w.a2bKo + w.b2aOk + w.b2aKo', 'DESC')
+                 ->orderBy($orderBy, 'DESC')
                  ->setMaxResults($n)
                  ->getQuery();
 

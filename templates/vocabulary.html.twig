@@ -4,7 +4,9 @@
 {% block title %}Vocabulary{% endblock %}
 
 {% block body %}
-  <div id='origin'> French: {{word}}</div>
+  <div id='origin'> French: {{wordA}}</div>
+  <div id='reverse' style='visibility: hidden;'> Spanish: {{wordB}}</div>
+
   <script type="text/javascript">
     function show()
     {
@@ -22,9 +24,34 @@
   <button class="button" onclick="window.location.href='{{linkKo}}/{{id}}'">Wrong</button>
 
   <br>
+<br>
+<br>
 
   <button class="button" {%if mode == "worst"%} id="selected" {% endif %} onclick="window.location.href='/setSort/worst'">Sort by Worst</button>
   <button class="button" {%if mode == "random"%} id="selected" {% endif %} onclick="window.location.href='/setSort/random'">Sort by Random</button>
   <button class="button" {%if mode == "unknown"%} id="selected" {% endif %} onclick="window.location.href='/setSort/unknown'">Sort by Unknown</button>
+
+
+<br>
+
+
+  <button class="button" 
+  {%if langSelected == "both"%}  
+    id="selected" 
+  {% endif %} 
+  onclick="window.location.href='/setLang/both'">Ask Both</button>
+
+  <button class="button" 
+  {%if langSelected == "langA"%} 
+    id="selected" 
+  {% endif %} 
+  onclick="window.location.href='/setLang/langA'">Ask {{langAName}}</button>
+
+  <button class="button" 
+  {%if langSelected == "langB"%} 
+    id="selected" 
+  {% endif %} 
+  onclick="window.location.href='/setLang/langB'">Ask {{langBName}}</button>
+
 
 {% endblock %}
