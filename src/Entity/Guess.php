@@ -145,6 +145,24 @@ class Guess
 
         return $this;
     }
-
-
+    public function incA2bOk() : self
+    {
+        $this->a2bOk = $this->a2bOk+1;
+        return $this;
+    }
+    public function incA2bKo() : self
+    {
+        $this->a2bKo = $this->a2bKo+1;
+        return $this;
+    }
+    public function incB2aOk() : self
+    {
+        $this->b2aOk = $this->b2aOk+1;
+        return $this;
+    }
+    public function incB2aKo() : self
+    {
+        $this->b2aKo = $this->b2aKo+1;
+        return $this;
+    }
 }

@@ -17,7 +17,8 @@ class GuessRepository extends ServiceEntityRepository
 
     public function findOneOfTheWorsts($n, $langQuery)
     {   
-      $orderBy = '';
+      dump($langQuery);
+      //$orderBy = '';
       if($langQuery == 'langA')
         $orderBy = 'w.a2bOk - w.a2bKo';
       if($langQuery == 'langB')
@@ -26,6 +27,7 @@ class GuessRepository extends ServiceEntityRepository
       $qb = $this->createQueryBuilder('w')
                  ->orderBy($orderBy, 'ASC')
                  ->setMaxResults($n)
+                 ->where('w.user = 1')
                  ->getQuery();
 
       $result = $qb->execute();
@@ -37,15 +39,16 @@ class GuessRepository extends ServiceEntityRepository
 
     public function findOneOfTheUnknown($n, $langQuery)
     {   
-      $orderBy = '';
+      //$orderBy = '';
       if($langQuery == 'langA')
         $orderBy = 'w.a2bOk + w.a2bKo';
       if($langQuery == 'langB')
         $orderBy = 'w.b2aOk + w.b2aKo';
 
       $qb = $this->createQueryBuilder('w')
-                 ->orderBy($orderBy, 'DESC')
+                 ->orderBy($orderBy, 'ASC')
                  ->setMaxResults($n)
+                 ->where('w.user = 1')
                  ->getQuery();
 
       $result = $qb->execute();
@@ -59,6 +62,7 @@ class GuessRepository extends ServiceEntityRepository
     {
       $qb = $this->createQueryBuilder('c')
                  ->select('count(c.id)')
+                 ->where('c.user = 1')
                  ->getQuery();
       
       $count = $qb->execute();

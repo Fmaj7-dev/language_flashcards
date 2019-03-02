@@ -4,8 +4,8 @@
 {% block title %}Vocabulary{% endblock %}
 
 {% block body %}
-  <div id='origin'> French: {{wordA}}</div>
-  <div id='reverse' style='visibility: hidden;'> Spanish: {{wordB}}</div>
+  <div id='origin'> {{langQueryName|capitalize}}: {{wordQuestioned}}</div>
+  <div id='reverse' style='visibility: hidden;'> {{langNotQueryName|capitalize}}: {{wordAnswered}}</div>
 
   <script type="text/javascript">
     function show()
@@ -27,13 +27,25 @@
 <br>
 <br>
 
-  <button class="button" {%if mode == "worst"%} id="selected" {% endif %} onclick="window.location.href='/setSort/worst'">Sort by Worst</button>
-  <button class="button" {%if mode == "random"%} id="selected" {% endif %} onclick="window.location.href='/setSort/random'">Sort by Random</button>
-  <button class="button" {%if mode == "unknown"%} id="selected" {% endif %} onclick="window.location.href='/setSort/unknown'">Sort by Unknown</button>
+  <button class="button" 
+  {%if mode == "worst"%} 
+    id="selected" 
+  {% endif %} 
+  onclick="window.location.href='/setSort/worst'">Sort by Worst</button>
 
+  <button class="button" 
+  {%if mode == "random"%} 
+    id="selected" 
+  {% endif %} 
+  onclick="window.location.href='/setSort/random'">Sort by Random</button>
+
+  <button class="button" 
+  {%if mode == "unknown"%} 
+    id="selected" 
+  {% endif %} 
+  onclick="window.location.href='/setSort/unknown'">Sort by Unknown</button>
 
 <br>
-
 
   <button class="button" 
   {%if langSelected == "both"%}  

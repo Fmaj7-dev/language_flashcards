@@ -43,10 +43,14 @@ class VocabularyController extends AbstractController
     $langAName = $session->get('langAName');
     $langBName = $session->get('langBName');
 
-    $langQuery = 'langB';
+    
+    // Actual language for the query (if user selects 'both' we have to choose one)
+    $langQuery = $langSelected;
     if($langSelected == 'both')
       if(rand(0,1)) $langQuery = 'langA';
-
+    else
+      $langQuery = 'langB';
+      
     if($mode == "worst")
     {
       $guess = $repository->findOneOfTheWorsts(1, $langQuery);
@@ -64,14 +68,49 @@ class VocabularyController extends AbstractController
       return ("mode not set");
     }
     $vocabulary = $guess->getVocabulary();
+
+    
+    // variables to pass to the template
+    if($langQuery == 'langA')
+    {
+      // Name of the language of the question
+      $langQueryName = $langAName;
+      // Name of the language of the answer
+      $langNotQueryName = $langBName;
+      // Word asked
+      $wordQuestioned = $vocabulary->getWordA();
+      // response
+      $wordAnswered = $vocabulary->getWordB();
+      // link ok
+      $linkOk = 'a2bok';
+      // link ko
+      $linkKo = 'a2bko';
+    }
+    else
+    {
+      // Name of the language of the question
+      $langQueryName = $langBName;
+      // Name of the language of the answer
+      $langNotQueryName = $langAName;
+      // Word asked
+      $wordQuestioned = $vocabulary->getWordB();
+      // response
+      $wordAnswered = $vocabulary->getWordA();
+      // link ok
+      $linkOk = 'b2aok';
+      // link ko
+      $linkKo = 'b2ako';
+    }
   
     return $this->render('vocabulary.html.twig', 
-                        ['wordA' => $vocabulary->getWordA(),
-                         'wordB' => $vocabulary->getWordB(),
+                        ['wordQuestioned' => $wordQuestioned,
+                         'wordAnswered' => $wordAnswered,
                          'id' => $guess->getId(),
-                         'linkOk' => 'a2bok',
-                         'linkKo' => 'b2ako',
+                         'linkOk' => $linkOk,
+                         'linkKo' => $linkKo,
                          'mode' => $mode,
+                         'langQueryName' => $langQueryName,
+                         'langNotQueryName' => $langNotQueryName,
                          'langSelected' => $langSelected,
                          'langAName' => $langAName,
                          'langBName' => $langBName]);
@@ -83,37 +122,71 @@ class VocabularyController extends AbstractController
   */
   public function a2bok($id)
   {
-    /*$entityManager = $this->getDoctrine()->getManager();
-    $word = $entityManager->getRepository(Vocabulary::class)->find($id);
+    $entityManager = $this->getDoctrine()->getManager();
+    $word = $entityManager->getRepository(Guess::class)->find($id);
 
     if (!$word) {
       throw $this->createNotFoundException('No word found for id '.$id);
     }   
 
-    $word->incF2sOk();
+    $word->incA2bOk();
     $entityManager->flush();
 
-    return $this->redirectToRoute('app_vocabulary_random', []);*/
+    return $this->redirectToRoute('app_vocabulary_random', []);
   }
 
-
-
-  /**
-  * @Route("/f2sko/{id}")
+  /** 
+  * @Route("/a2bko/{id}")
   */
-  public function b2aok($id)
+  public function a2bko($id)
   {
-    /*$entityManager = $this->getDoctrine()->getManager();
-    $word = $entityManager->getRepository(Vocabulary::class)->find($id);
+    $entityManager = $this->getDoctrine()->getManager();
+    $word = $entityManager->getRepository(Guess::class)->find($id);
 
     if (!$word) {
       throw $this->createNotFoundException('No word found for id '.$id);
-    }
+    }   
 
-    $word->incS2fOk();
+    $word->incA2bKo();
     $entityManager->flush();
 
-    return $this->redirectToRoute('app_vocabulary_random', []);*/
+    return $this->redirectToRoute('app_vocabulary_random', []);
+  }
+
+  /** 
+  * @Route("/b2aok/{id}")
+  */
+  public function b2aok($id)
+  {
+    $entityManager = $this->getDoctrine()->getManager();
+    $word = $entityManager->getRepository(Guess::class)->find($id);
+
+    if (!$word) {
+      throw $this->createNotFoundException('No word found for id '.$id);
+    }   
+
+    $word->incB2aOk();
+    $entityManager->flush();
+
+    return $this->redirectToRoute('app_vocabulary_random', []);
+  }
+
+  /** 
+  * @Route("/b2ako/{id}")
+  */
+  public function b2ako($id)
+  {
+    $entityManager = $this->getDoctrine()->getManager();
+    $word = $entityManager->getRepository(Guess::class)->find($id);
+
+    if (!$word) {
+      throw $this->createNotFoundException('No word found for id '.$id);
+    }   
+
+    $word->incB2aKo();
+    $entityManager->flush();
+
+    return $this->redirectToRoute('app_vocabulary_random', []);
   }
 
   /**
