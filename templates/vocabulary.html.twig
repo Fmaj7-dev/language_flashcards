@@ -1,69 +1,80 @@
 {# templates/vocabulary.html.twig #}
 {% extends 'base.html.twig' %}
-
 {% block title %}Vocabulary{% endblock %}
-
 {% block body %}
-  <div id='origin'> {{langQueryName|capitalize}}: {{wordQuestioned}}</div>
-  <div id='reverse' style='visibility: hidden;'> {{langNotQueryName|capitalize}}: {{wordAnswered}}</div>
 
-  <script type="text/javascript">
-    function show()
-    {
-      var elem = document.getElementById('reverse');
-      elem.style.visibility = 'visible';
-    }
-  </script>
+<div class="row">
+  <div class="main">
+    <h2>Question</h2>
+    <div id='origin'> {{langQueryName|capitalize}}: {{wordQuestioned}}</div>
+    <div id='reverse' style='visibility: hidden;'> {{langNotQueryName|capitalize}}: {{wordAnswered}}</div>
 
-  <br><br>
-  <button class="button" type="button" onclick="show()">Show</button>
-  <br>
-  <br>
+    <script type="text/javascript">
+      function show()
+      {
+        var elem = document.getElementById('reverse');
+        elem.style.visibility = 'visible';
+      }
+    </script>
 
-  <button class="button" onclick="window.location.href='{{linkOk}}/{{id}}'">Correct</button>
-  <button class="button" onclick="window.location.href='{{linkKo}}/{{id}}'">Wrong</button>
+    <button class="show" onclick="show()">Show Answer</button>
+    <button class="button" onclick="window.location.href='{{linkOk}}/{{id}}'">Correct</button>
+    <button class="button" onclick="window.location.href='{{linkKo}}/{{id}}'">Wrong</button>
+  </div>
 
-  <br>
-<br>
-<br>
+  <div class="side">
+    <h2>Options</h2>
+    <h5>Sorting options</h5>
+      <button class="button" 
+      {%if mode == "worst"%} 
+        id="selected" 
+      {% endif %} 
+      onclick="window.location.href='/setSort/worst'">Sort by Worst</button>
 
-  <button class="button" 
-  {%if mode == "worst"%} 
-    id="selected" 
-  {% endif %} 
-  onclick="window.location.href='/setSort/worst'">Sort by Worst</button>
+      <button class="button" 
+      {%if mode == "random"%} 
+        id="selected" 
+      {% endif %} 
+      onclick="window.location.href='/setSort/random'">Sort by Random</button>
 
-  <button class="button" 
-  {%if mode == "random"%} 
-    id="selected" 
-  {% endif %} 
-  onclick="window.location.href='/setSort/random'">Sort by Random</button>
+      <button class="button" 
+      {%if mode == "unknown"%} 
+        id="selected" 
+      {% endif %} 
+      onclick="window.location.href='/setSort/unknown'">Sort by Unknown</button>
+    
+    <h5>Language Asked</h5>
+      <button class="button" 
+        {%if langSelected == "both"%}  
+          id="selected" 
+        {% endif %} 
+        onclick="window.location.href='/setLang/both'">Ask Both</button>
 
-  <button class="button" 
-  {%if mode == "unknown"%} 
-    id="selected" 
-  {% endif %} 
-  onclick="window.location.href='/setSort/unknown'">Sort by Unknown</button>
+        <button class="button" 
+        {%if langSelected == "langA"%} 
+          id="selected" 
+        {% endif %} 
+        onclick="window.location.href='/setLang/langA'">Ask {{langAName}}</button>
 
-<br>
+        <button class="button" 
+        {%if langSelected == "langB"%} 
+          id="selected" 
+        {% endif %} 
+        onclick="window.location.href='/setLang/langB'">Ask {{langBName}}</button>
 
-  <button class="button" 
-  {%if langSelected == "both"%}  
-    id="selected" 
-  {% endif %} 
-  onclick="window.location.href='/setLang/both'">Ask Both</button>
+    <h5>Category</h5>
+      <button class="button" 
+        {#{%if nounSelected %}  
+          id="selected" 
+        {% endif %} #}
+        onclick="window.location.href='/setCat/noun'">Noun</button>
 
-  <button class="button" 
-  {%if langSelected == "langA"%} 
-    id="selected" 
-  {% endif %} 
-  onclick="window.location.href='/setLang/langA'">Ask {{langAName}}</button>
-
-  <button class="button" 
-  {%if langSelected == "langB"%} 
-    id="selected" 
-  {% endif %} 
-  onclick="window.location.href='/setLang/langB'">Ask {{langBName}}</button>
-
+      <button class="button" 
+        {#{%if verbSelected %}  
+          id="selected" 
+        {% endif %} #}
+        onclick="window.location.href='/setCat/verb'">Verb</button>  
+  </div>
+</div>
 
 {% endblock %}

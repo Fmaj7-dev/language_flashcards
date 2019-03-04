@@ -1,20 +1,32 @@
 {# templates/base.html.twig #}
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <link rel="stylesheet" href="style.css">
-        <div class="navbar">
-        <a href="vocabulaire.php">Vocabulaire</a>
-        <a href="verbs.php">Verbs</a>
-        <a href="stats.php">Stats</a>
-        </div>
-        <title>{% block title %}{% endblock %}</title>
-    </head>
-    <body>
-        <div id="content">
-        <br>
-            {% block body %}{% endblock %}
-        </div>
-    </body>
+<html lang="en">
+<head>
+    <title>Vocabulary Quiz</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=0.5">
+    <!--<meta name="viewport" content="width=720, initial-scale=1"> -->
+</head>
+<body>
+
+<div class="header">
+  <h1>Vocabulary Quiz</h1>
+  <p>A language learning tool.</p>
+</div>
+
+<div class="navbar">
+  <a href="#">Vocabulary</a>
+  <a href="#">Verbs</a>
+  <a href="#">Stats</a>
+  <p class="right">Logged as: eturegano</a>
+</div>
+
+{% block body %}{% endblock %}
+
+<div class="footer">
+  <h2>FMaj7 2019</h2>
+</div>
+
+</body>
 </html>
