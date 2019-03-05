@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use App\Entity\Vocabulary;
 use App\Entity\Guess;
 
+use App\Utils\Table;
+
 class VocabularyController extends AbstractController
 {
   public function setDefaultSession(SessionInterface $session)
@@ -206,5 +208,15 @@ class VocabularyController extends AbstractController
     $session = $this->get('session');
     $session->set('langSelected', $lang);
     return $this->redirectToRoute('app_vocabulary_random', []);
+  }
+
+  /**
+  * @Route("/stats")
+  */
+  public function stats(SessionInterface $session)
+  {
+
+    return $this->render('stats.html.twig', 
+                        []);
   }
  }

@@ -6,20 +6,24 @@
 <div class="row">
   <div class="main">
     <h2>Question</h2>
-    <div id='origin'> {{langQueryName|capitalize}}: {{wordQuestioned}}</div>
-    <div id='reverse' style='visibility: hidden;'> {{langNotQueryName|capitalize}}: {{wordAnswered}}</div>
+    <div id='origin'> <b>{{langQueryName|capitalize}}:</b> {{wordQuestioned}}</div>
+    <div id='reverse' style='visibility: hidden;'><b> {{langNotQueryName|capitalize}}:</b> {{wordAnswered}}</div>
 
     <script type="text/javascript">
       function show()
       {
         var elem = document.getElementById('reverse');
         elem.style.visibility = 'visible';
+
+        elem= document.getElementById('show_answer');
+        elem.style.visibility = 'hidden';
       }
     </script>
 
-    <button class="show" onclick="show()">Show Answer</button>
-    <button class="button" onclick="window.location.href='{{linkOk}}/{{id}}'">Correct</button>
-    <button class="button" onclick="window.location.href='{{linkKo}}/{{id}}'">Wrong</button>
+    <button id="show_answer" class="show" onclick="show()">Show Answer</button>
+
+    <button class="correct_button" onclick="window.location.href='{{linkOk}}/{{id}}'">Correct</button>
+    <button class="wrong_button" onclick="window.location.href='{{linkKo}}/{{id}}'">Wrong</button>
   </div>
 
   <div class="side">

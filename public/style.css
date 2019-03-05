@@ -94,6 +94,34 @@
     width: 30%;
   }
 
+  .correct_button {
+    background-color: #408b4e;
+    border: none;
+    color: #fff;
+    padding: 10px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 15px;
+    margin: 4px 2px;
+    cursor: pointer;
+    width: 30%;
+  }
+
+  .wrong_button {
+    background-color: #b43844;
+    border: none;
+    color: #fff;
+    padding: 10px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 15px;
+    margin: 4px 2px;
+    cursor: pointer;
+    width: 30%;
+  }
+
   #selected{
     background-color: #888;
   }
