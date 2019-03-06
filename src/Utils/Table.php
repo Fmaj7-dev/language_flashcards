@@ -11,28 +11,28 @@ class Table
 
     function __construct($numColumns, $headerData) 
     {
-        $num_columns = $numColumns;
-        $header = $headerData;
+        $this->num_columns = $numColumns;
+        $this->header = $headerData;
     }
 
     public function getHeader()
     {
-        return $header;
+        return $this->header;
     }
 
     public function getNumColumns()
     {
-        return $num_columns;
+        return $this->num_columns;
     }
 
     public function getData()
     {
-        return $data;
+        return $this->data;
     }
 
     public function appendRow($newData)
     {
-        $data[] = $newData;
+        $this->data[] = $newData;
     }
 }
 

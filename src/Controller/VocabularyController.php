@@ -18,16 +18,19 @@ class VocabularyController extends AbstractController
   {
     // global variables
     if(!$session->has('mode'))
-    $session->set('mode', 'random');
+      $session->set('mode', 'random');
 
     if(!$session->has('langAName'))
-    $session->set('langAName', 'french');
+      $session->set('langAName', 'french');
 
     if(!$session->has('langBName'))
-    $session->set('langBName', 'spanish');   
+      $session->set('langBName', 'spanish');   
 
     if(!$session->has('langSelected'))
-    $session->set('langSelected', 'both');
+      $session->set('langSelected', 'both');
+
+    if(!$session->has('langStudyingId'))
+      $session->set('langStudyingId', 2);   
   }
 
   /**
@@ -215,8 +218,20 @@ class VocabularyController extends AbstractController
   */
   public function stats(SessionInterface $session)
   {
+    // table general
+    $stats = new Table(2, array("Name", "Value"));
+    $repository = $this->getDoctrine()->getRepository( Guess::class );
+    $stats->appendRow(["Number of words", $repository->getCount()]);
+
+    $stats2 = new Table(2, array("asdf", "qwer"));
+    $repository = $this->getDoctrine()->getRepository( Guess::class );
+    $stats2->appendRow(["Number of words", $repository->getCount()]);
+
+    $tables [] = $stats;
+    $tables [] = $stats2;
+
 
     return $this->render('stats.html.twig', 
-                        []);
+                        ['Tables' => $tables]);
   }
  }
