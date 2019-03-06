@@ -4,14 +4,14 @@ namespace App\Utils;
 
 class Table 
 {
-    protected $num_columns;
+    protected $title;
 
     protected $header;
     protected $data;
 
-    function __construct($numColumns, $headerData) 
+    function __construct($title, $headerData) 
     {
-        $this->num_columns = $numColumns;
+        $this->title = $title;
         $this->header = $headerData;
     }
 
@@ -30,9 +30,19 @@ class Table
         return $this->data;
     }
 
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
     public function appendRow($newData)
     {
         $this->data[] = $newData;
+    }
+
+    public function setRows($rows)
+    {
+        $this->data[] = $rows;
     }
 }
 

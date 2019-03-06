@@ -219,17 +219,35 @@ class VocabularyController extends AbstractController
   public function stats(SessionInterface $session)
   {
     // table general
-    $stats = new Table(2, array("Name", "Value"));
+    $stats = new Table("General Statistics", array("Name", "Value"));
     $repository = $this->getDoctrine()->getRepository( Guess::class );
-    $stats->appendRow(["Number of words", $repository->getCount()]);
+    $count = $repository->getCount();
 
-    $stats2 = new Table(2, array("asdf", "qwer"));
-    $repository = $this->getDoctrine()->getRepository( Guess::class );
-    $stats2->appendRow(["Number of words", $repository->getCount()]);
+    $knownA = $repository->getKnownA();
+    $percentageA = $knownA*100/$count;
+
+    $knownB = $repository->getKnownB();
+    $percentageB = $knownB*100/$count;
+
+    $stats->appendRow(["Number of words", $count]);
+    $stats->appendRow(["Known French words", $knownA." ".$percentageA."%"]);
+    $stats->appendRow(["Known Spanish words", $knownB." ".$percentageB."%"]);
+
+    $stats2 = new Table("French to Spanish", array("French", "Spanish", "ok", "ko", "diff"));
+    $rows = $repository->getWorstA2B();
+    $stats2->setRows($rows);
+
+    $stats3 = new Table("Spanish to French", array("Spanish", "French", "ok", "ko", "diff"));
+    $rows = $repository->getWorstB2A();
+    $stats3->setRows($rows);
+
+    
 
     $tables [] = $stats;
     $tables [] = $stats2;
+    $tables [] = $stats3;
 
+    
 
     return $this->render('stats.html.twig', 
                         ['Tables' => $tables]);

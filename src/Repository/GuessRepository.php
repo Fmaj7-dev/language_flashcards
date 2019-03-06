@@ -128,4 +128,96 @@ class GuessRepository extends ServiceEntityRepository
     $result = $statement->fetchAll();
     return $result[0]["count"];
   }
+
+  public function getKnownA()
+  {
+    $em = $this->getEntityManager();
+    
+    $query = 'select count(guess.id) as count from guess, vocabulary  
+    where guess.vocabulary_id = vocabulary.id 
+    and guess.a2b_ok > guess.a2b_ko
+    and guess.user_id = :user  
+    and vocabulary.language_a = :lang';
+    
+    $statement = $em->getConnection()->prepare($query);
+
+    // FIXME user & lang are hardcoded
+    $statement->bindValue('user', 1);
+    $statement->bindValue('lang', 2);
+    $statement->execute();
+
+    $result = $statement->fetchAll();
+    return $result[0]["count"];
+  }
+
+  public function getKnownB()
+  {
+    $em = $this->getEntityManager();
+    
+    $query = 'select count(guess.id) as count from guess, vocabulary  
+    where guess.vocabulary_id = vocabulary.id 
+    and guess.b2a_ok > guess.b2a_ko
+    and guess.user_id = :user  
+    and vocabulary.language_a = :lang';
+    
+    $statement = $em->getConnection()->prepare($query);
+
+    // FIXME user & lang are hardcoded
+    $statement->bindValue('user', 1);
+    $statement->bindValue('lang', 2);
+    $statement->execute();
+
+    $result = $statement->fetchAll();
+    if(count($result) == 0)
+      return [];
+
+    return $result[0]["count"];
+  }
+
+  public function getWorstA2B()
+  {
+    $em = $this->getEntityManager();
+    
+    $query = 'select v.word_a, v.word_b, g.a2b_ok, g.a2b_ko, g.a2b_ok-g.a2b_ko from guess g, vocabulary v 
+    where g.a2b_ok-g.a2b_ko < 0 
+    and g.vocabulary_id = v.id 
+    and g.user_id = 1 
+    and v.language_a = 2';
+    
+    $statement = $em->getConnection()->prepare($query);
+
+    // FIXME user & lang are hardcoded
+    $statement->bindValue('user', 1);
+    $statement->bindValue('lang', 2);
+    $statement->execute();
+
+    $result = $statement->fetchAll();
+    if(count($result) == 0)
+      return [];
+
+    return $result[0];
+  }
+
+  public function getWorstB2A()
+  {
+    $em = $this->getEntityManager();
+    
+    $query = 'select v.word_b, v.word_a, g.b2a_ok, g.b2a_ko, g.b2a_ok-g.b2a_ko from guess g, vocabulary v 
+    where g.b2a_ok-g.b2a_ko < 0 
+    and g.vocabulary_id = v.id 
+    and g.user_id = 1 
+    and v.language_a = 2';
+    
+    $statement = $em->getConnection()->prepare($query);
+
+    // FIXME user & lang are hardcoded
+    $statement->bindValue('user', 1);
+    $statement->bindValue('lang', 2);
+    $statement->execute();
+
+    $result = $statement->fetchAll();
+
+    return $result[0];
+  }
+
 }
