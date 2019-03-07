@@ -11,7 +11,7 @@
   .header {
     padding: 10px;
     text-align: center;
-    background: #1abc9c;
+    background: #053c45;
     color: white;
   }
   
@@ -23,7 +23,7 @@
   /* Style the top navigation bar */
   .navbar {
     overflow: hidden;
-    background-color: #333;
+    background-color: #02191c;
   }
   
   /* Style the navigation bar links */
@@ -62,12 +62,12 @@
   /* Sidebar/left column */
   .side {
     flex: 30%;
-    background-color: #f1f1f1;
+    background-color: #abc9cf;
     padding: 30px;
   }
   
   .button {
-    background-color: #333;
+    background-color: #021b1d;
     border: none;
     color: white;
     padding: 10px 10px;
@@ -81,7 +81,7 @@
   }
 
   .show {
-    background-color: #888;
+    background-color: #1e70aa;
     border: none;
     color: white;
     padding: 10px 10px;
@@ -95,7 +95,7 @@
   }
 
   .correct_button {
-    background-color: #408b4e;
+    background-color: #3dae7f;
     border: none;
     color: #fff;
     padding: 10px 10px;
@@ -109,7 +109,7 @@
   }
 
   .wrong_button {
-    background-color: #b43844;
+    background-color: #de3e38;
     border: none;
     color: #fff;
     padding: 10px 10px;
@@ -123,7 +123,7 @@
   }
 
   #selected{
-    background-color: #888;
+    background-color: #2f7578;
   }
   
   /* Main column */
@@ -146,7 +146,7 @@
     text-align: center;
     background: #ddd;
     font-size: 8px;
-    color: white;
+    color: #2f7578;
   }
   
   /* Responsive layout - when the screen is less than 700px wide, make the two columns stack on top of each other instead of next to each other */
