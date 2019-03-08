@@ -16,10 +16,9 @@ class GuessRepository extends ServiceEntityRepository
       parent::__construct($registry, Guess::class);
   }
 
+  // FIXME: use categories
   public function findOneOfTheWorsts($n, $langQuery)
   {   
-    dump($langQuery);
-    //$orderBy = '';
     if($langQuery == 'langA')
       $orderBy = 'w.a2bOk - w.a2bKo';
     if($langQuery == 'langB')
@@ -38,9 +37,9 @@ class GuessRepository extends ServiceEntityRepository
     return $result[$nth_element - 1];
   }
 
+  // FIXME: use categories
   public function findOneOfTheUnknown($n, $langQuery)
   {   
-    //$orderBy = '';
     if($langQuery == 'langA')
       $orderBy = 'w.a2bOk + w.a2bKo';
     if($langQuery == 'langB')
@@ -59,6 +58,7 @@ class GuessRepository extends ServiceEntityRepository
     return $result[$nth_element - 1];
   }
 
+  // FIXME: use categories
   public function findOneRandom()
   {
     $qb = $this->createQueryBuilder('c')
@@ -82,41 +82,16 @@ class GuessRepository extends ServiceEntityRepository
     return $result[$nth_element - 1];
   }
 
-  // select count(guess.id) from guess, vocabulary 
-  // where guess.vocabulary_id = vocabulary.id 
-  // and guess.user_id = 1 
-  // and vocabulary.language_a = 2
   public function getCount()
   {
     $qb = $this->createQueryBuilder('g');
 
-    /*$qb->select('g')
-          ->innerJoin('vocabulary', 'v', Join::WITH, $qb->expr()->andx(
-              $qb->expr()->eq('v.id', 'g.vocabulary_id'),
-              $qb->expr()->eq('v.language_a', ':language')
-          ))
-          ->and('g.user_id = :user_id');*/
-
-    /*$qb->select('g')
-    ->join('vocabulary', 'v')
-    ->where('g.vocabulary.id = v.id')
-    ->andWhere('g.user_id = :user')
-    ->andWhere('v.language_a = :lang');
-
-    $qb->setParameters(array(
-            'user' => 1,
-            'lang' => 2,
-        ));
-    
-    $query = $qb->getQuery();
-    dump($query);
-    return $query->getResult();
-
-    return $count[0][1];*/
-
     $em = $this->getEntityManager();
     
-    $query = 'select count(guess.id) as count from guess, vocabulary  where guess.vocabulary_id = vocabulary.id and guess.user_id = :user  and vocabulary.language_a = :lang';
+    $query = 'select count(guess.id) as count from guess, vocabulary  
+    where guess.vocabulary_id = vocabulary.id 
+    and guess.user_id = :user  
+    and vocabulary.language_a = :lang';
     
     $statement = $em->getConnection()->prepare($query);
 

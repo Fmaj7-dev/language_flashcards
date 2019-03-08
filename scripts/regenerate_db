@@ -1,0 +1,2 @@
+#!/bin/bash
+mysql -u root -p < drop_database.sql && mysql -u root -p < create_database.sql && mysql -u root -p < fill_database.sql

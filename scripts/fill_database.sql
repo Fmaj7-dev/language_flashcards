@@ -13,13 +13,17 @@ INSERT INTO `category` (`id`, `name`) VALUES
     (6, 'Preposition'),
     (7, 'Conjunction'),
     (8, 'Determiner'),
-    (9, 'Exclamation');
+    (9, 'Exclamation'),
+    (10, 'Expression'); 
 
 INSERT INTO `vocabulary` (`id`, `word_a`, `word_b`, `language_a`, `language_b`, `level`) VALUES
     (1, 'tôt /to/', 'temprano\r\n', 2, 1, 2), 
     (2, 'en retard /ʀ(ə)taʀ/', 'tarde, con retraso\r\n', 2, 1, 2), 
     (3, 'avant (de) /avɑ̃/', 'antes (de)\r\n', 2, 1, 2), 
-    (4, 'après /apʀɛ/', 'después\r\n', 2, 1, 1);
+    (4, 'après /apʀɛ/', 'después\r\n', 2, 1, 1),
+    (5, 'tricoter', 'tricoté\r\n', 2, 1, 1),
+    (6, 'manger', 'mangé\r\n', 2, 1, 1),
+    (7, 'ronflir', 'ronfli\r\n', 2, 1, 1);
 
 INSERT INTO `user` (`id`, `name`, `email`, `native_language`) VALUES
     (1, 'Enrique', 'test@test.com', 1),
@@ -29,7 +33,10 @@ INSERT INTO `vocabulary_category` (`id`,`vocabulary_id`, `category_id`) VALUES
     (1, 1, 1),
     (2, 2, 1),
     (3, 3, 1),
-    (4, 4, 1);
+    (4, 4, 1),
+    (5, 5, 2),
+    (6, 6, 2),
+    (7, 7, 2);
 
 INSERT INTO `user_language` (`id`, `user_id`, `language_id`) VALUES
     (1, 1, 1),

@@ -21,7 +21,7 @@ class VocabularyController extends AbstractController
       $session->set('mode', 'random');
 
     if(!$session->has('langAName'))
-      $session->set('langAName', 'italian');
+      $session->set('langAName', 'french');
 
     if(!$session->has('langBName'))
       $session->set('langBName', 'spanish');   
