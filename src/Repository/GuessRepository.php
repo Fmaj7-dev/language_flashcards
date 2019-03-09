@@ -16,19 +16,22 @@ class GuessRepository extends ServiceEntityRepository
       parent::__construct($registry, Guess::class);
   }
 
-  public function findOneOfTheWorsts($n, $langQuery)
+  /**
+   * Returns one of the worst $n words
+   */
+  public function findOneOfTheWorsts($n, $langQuery, $user_id)
   {   
-    dump($langQuery);
-    //$orderBy = '';
     if($langQuery == 'langA')
       $orderBy = 'w.a2bOk - w.a2bKo';
     if($langQuery == 'langB')
       $orderBy = 'w.b2aOk - w.b2aKo';
 
+
     $qb = $this->createQueryBuilder('w')
                 ->orderBy($orderBy, 'ASC')
                 ->setMaxResults($n)
-                ->where('w.user = 1')
+                ->where('w.user = :user')
+                ->setParameter('user', $user_id)
                 ->getQuery();
 
     $result = $qb->execute();
@@ -38,7 +41,10 @@ class GuessRepository extends ServiceEntityRepository
     return $result[$nth_element - 1];
   }
 
-  public function findOneOfTheUnknown($n, $langQuery)
+  /**
+   * Returns one of the most unknown $n words
+   */
+  public function findOneOfTheUnknown($n, $langQuery, $user_id)
   {   
     //$orderBy = '';
     if($langQuery == 'langA')
@@ -49,7 +55,8 @@ class GuessRepository extends ServiceEntityRepository
     $qb = $this->createQueryBuilder('w')
                 ->orderBy($orderBy, 'ASC')
                 ->setMaxResults($n)
-                ->where('w.user = 1')
+                ->where('w.user = :user')
+                ->setParameter('user', $user_id)
                 ->getQuery();
 
     $result = $qb->execute();
@@ -59,11 +66,15 @@ class GuessRepository extends ServiceEntityRepository
     return $result[$nth_element - 1];
   }
 
-  public function findOneRandom()
+  /**
+   * Returns one random word
+   */
+  public function findOneRandom($user_id)
   {
     $qb = $this->createQueryBuilder('c')
                 ->select('count(c.id)')
-                ->where('c.user = 1')
+                ->where('c.user = :user')
+                ->setParameter('user', $user_id)
                 ->getQuery();
     
     $count = $qb->execute();
@@ -82,11 +93,10 @@ class GuessRepository extends ServiceEntityRepository
     return $result[$nth_element - 1];
   }
 
-  // select count(guess.id) from guess, vocabulary 
-  // where guess.vocabulary_id = vocabulary.id 
-  // and guess.user_id = 1 
-  // and vocabulary.language_a = 2
-  public function getCount()
+  /**
+   * Returns the number of words a user has.
+   */
+  public function getCount($user_id)
   {
     $qb = $this->createQueryBuilder('g');
 
@@ -116,12 +126,15 @@ class GuessRepository extends ServiceEntityRepository
 
     $em = $this->getEntityManager();
     
-    $query = 'select count(guess.id) as count from guess, vocabulary  where guess.vocabulary_id = vocabulary.id and guess.user_id = :user  and vocabulary.language_a = :lang';
+    $query = 'select count(guess.id) as count from guess, vocabulary  
+    where guess.vocabulary_id = vocabulary.id 
+    and guess.user_id = :user 
+    and vocabulary.language_a = :lang';
     
     $statement = $em->getConnection()->prepare($query);
 
     // FIXME user & lang are hardcoded
-    $statement->bindValue('user', 1);
+    $statement->bindValue('user', $user_id);
     $statement->bindValue('lang', 2);
     $statement->execute();
 
@@ -129,7 +142,10 @@ class GuessRepository extends ServiceEntityRepository
     return $result[0]["count"];
   }
 
-  public function getKnownA()
+  /**
+   * Returns one of words the user knows how to translate from language A to language B
+   */
+  public function getKnownA($user_id)
   {
     $em = $this->getEntityManager();
     
@@ -142,7 +158,7 @@ class GuessRepository extends ServiceEntityRepository
     $statement = $em->getConnection()->prepare($query);
 
     // FIXME user & lang are hardcoded
-    $statement->bindValue('user', 1);
+    $statement->bindValue('user', $user_id);
     $statement->bindValue('lang', 2);
     $statement->execute();
 
@@ -150,7 +166,10 @@ class GuessRepository extends ServiceEntityRepository
     return $result[0]["count"];
   }
 
-  public function getKnownB()
+  /**
+   * Returns one of words the user knows how to translate from language B to language A
+   */
+  public function getKnownB($user_id)
   {
     $em = $this->getEntityManager();
     
@@ -163,7 +182,7 @@ class GuessRepository extends ServiceEntityRepository
     $statement = $em->getConnection()->prepare($query);
 
     // FIXME user & lang are hardcoded
-    $statement->bindValue('user', 1);
+    $statement->bindValue('user', $user_id);
     $statement->bindValue('lang', 2);
     $statement->execute();
 
@@ -174,20 +193,24 @@ class GuessRepository extends ServiceEntityRepository
     return $result[0]["count"];
   }
 
-  public function getWorstA2B()
+  /**
+   * Returns a list of words that the user doesn't know how to translate from language A
+   * to language B (his native language)
+   */
+  public function getWorstA2B($user_id)
   {
     $em = $this->getEntityManager();
     
     $query = 'select v.word_a, v.word_b, g.a2b_ok, g.a2b_ko, g.a2b_ok-g.a2b_ko from guess g, vocabulary v 
     where g.a2b_ok-g.a2b_ko < 0 
     and g.vocabulary_id = v.id 
-    and g.user_id = 1 
-    and v.language_a = 2';
+    and g.user_id = :user 
+    and v.language_a = :lang';
     
     $statement = $em->getConnection()->prepare($query);
 
     // FIXME user & lang are hardcoded
-    $statement->bindValue('user', 1);
+    $statement->bindValue('user', $user_id);
     $statement->bindValue('lang', 2);
     $statement->execute();
 
@@ -198,20 +221,24 @@ class GuessRepository extends ServiceEntityRepository
     return $result[0];
   }
 
-  public function getWorstB2A()
+  /**
+   * Returns a list of words that the user doesn't know how to translate from language B (his native language)
+   * to language A
+   */
+  public function getWorstB2A($user_id)
   {
     $em = $this->getEntityManager();
     
     $query = 'select v.word_b, v.word_a, g.b2a_ok, g.b2a_ko, g.b2a_ok-g.b2a_ko from guess g, vocabulary v 
     where g.b2a_ok-g.b2a_ko < 0 
     and g.vocabulary_id = v.id 
-    and g.user_id = 1 
-    and v.language_a = 2';
+    and g.user_id = :user
+    and v.language_a = :lang';
     
     $statement = $em->getConnection()->prepare($query);
 
     // FIXME user & lang are hardcoded
-    $statement->bindValue('user', 1);
+    $statement->bindValue('user', $user_id);
     $statement->bindValue('lang', 2);
     $statement->execute();
 

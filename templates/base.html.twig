@@ -19,10 +19,16 @@
 </div>
 
 <div class="navbar">
+{% if is_granted('IS_AUTHENTICATED_FULLY') %}
   <a href="/random">Vocabulary</a>
   <a href="#">Verbs</a>
   <a href="/stats">Stats</a>
   <p class="right">Logged in as: {{ app.user.name }}</a>
+{% else %}
+  <a href="#">Opinions</a>
+  
+  <a href="/login" class="right">Login</a>
+{% endif %}
 </div>
 
 {% block body %}{% endblock %}

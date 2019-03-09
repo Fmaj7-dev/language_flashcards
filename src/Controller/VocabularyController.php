@@ -49,6 +49,8 @@ class VocabularyController extends AbstractController
   {
     $repository = $this->getDoctrine()->getRepository( Guess::class );
 
+    $user_id = $this->getUser()->getId();
+
     $this->setDefaultSession($session);
 
     $mode = $session->get('mode');
@@ -66,15 +68,15 @@ class VocabularyController extends AbstractController
       
     if($mode == "worst")
     {
-      $guess = $repository->findOneOfTheWorsts(1, $langQuery);
+      $guess = $repository->findOneOfTheWorsts(1, $langQuery, $user_id);
     }
     else if($mode == "random")
     {
-      $guess = $repository->findOneRandom();
+      $guess = $repository->findOneRandom($user_id);
     }
     else if($mode == "unknown")
     {
-      $guess = $repository->findOneOfTheUnknown(1, $langQuery);
+      $guess = $repository->findOneOfTheUnknown(1, $langQuery, $user_id);
     }
     else
     {
@@ -91,9 +93,9 @@ class VocabularyController extends AbstractController
       // Name of the language of the answer
       $langNotQueryName = $langBName;
       // Word asked
-      $wordQuestioned = $vocabulary->getWordA();
+      $wordQuestioned = $vocabulary->getWordA($user_id);
       // response
-      $wordAnswered = $vocabulary->getWordB();
+      $wordAnswered = $vocabulary->getWordB($user_id);
       // link ok
       $linkOk = 'a2bok';
       // link ko
@@ -106,9 +108,9 @@ class VocabularyController extends AbstractController
       // Name of the language of the answer
       $langNotQueryName = $langAName;
       // Word asked
-      $wordQuestioned = $vocabulary->getWordB();
+      $wordQuestioned = $vocabulary->getWordB($user_id);
       // response
-      $wordAnswered = $vocabulary->getWordA();
+      $wordAnswered = $vocabulary->getWordA($user_id);
       // link ok
       $linkOk = 'b2aok';
       // link ko
@@ -143,7 +145,9 @@ class VocabularyController extends AbstractController
       throw $this->createNotFoundException('No word found for id '.$id);
     }   
 
-    $word->incA2bOk();
+    $user_id = $this->getUser()->getId();
+
+    $word->incA2bOk($user_id);
     $entityManager->flush();
 
     return $this->redirectToRoute('app_vocabulary_random', []);
@@ -162,7 +166,9 @@ class VocabularyController extends AbstractController
       throw $this->createNotFoundException('No word found for id '.$id);
     }   
 
-    $word->incA2bKo();
+    $user_id = $this->getUser()->getId();
+
+    $word->incA2bKo($user_id);
     $entityManager->flush();
 
     return $this->redirectToRoute('app_vocabulary_random', []);
@@ -181,7 +187,9 @@ class VocabularyController extends AbstractController
       throw $this->createNotFoundException('No word found for id '.$id);
     }   
 
-    $word->incB2aOk();
+    $user_id = $this->getUser()->getId();
+
+    $word->incB2aOk($user_id);
     $entityManager->flush();
 
     return $this->redirectToRoute('app_vocabulary_random', []);
@@ -200,7 +208,9 @@ class VocabularyController extends AbstractController
       throw $this->createNotFoundException('No word found for id '.$id);
     }   
 
-    $word->incB2aKo();
+    $user_id = $this->getUser()->getId();
+
+    $word->incB2aKo($user_id);
     $entityManager->flush();
 
     return $this->redirectToRoute('app_vocabulary_random', []);
@@ -236,12 +246,15 @@ class VocabularyController extends AbstractController
     // table general
     $stats = new Table("General Statistics", array("Name", "Value"));
     $repository = $this->getDoctrine()->getRepository( Guess::class );
-    $count = $repository->getCount();
 
-    $knownA = $repository->getKnownA();
+    $user_id = $this->getUser()->getId();
+
+    $count = $repository->getCount($user_id);
+
+    $knownA = $repository->getKnownA($user_id);
     $percentageA = $knownA*100/$count;
 
-    $knownB = $repository->getKnownB();
+    $knownB = $repository->getKnownB($user_id);
     $percentageB = $knownB*100/$count;
 
     $stats->appendRow(["Number of words", $count]);
@@ -249,14 +262,12 @@ class VocabularyController extends AbstractController
     $stats->appendRow(["Known Spanish words", $knownB." ".$percentageB."%"]);
 
     $stats2 = new Table("French to Spanish", array("French", "Spanish", "ok", "ko", "diff"));
-    $rows = $repository->getWorstA2B();
+    $rows = $repository->getWorstA2B($user_id);
     $stats2->setRows($rows);
 
     $stats3 = new Table("Spanish to French", array("Spanish", "French", "ok", "ko", "diff"));
-    $rows = $repository->getWorstB2A();
+    $rows = $repository->getWorstB2A($user_id);
     $stats3->setRows($rows);
-
-    
 
     $tables [] = $stats;
     $tables [] = $stats2;
