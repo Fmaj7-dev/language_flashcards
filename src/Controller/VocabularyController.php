@@ -6,12 +6,16 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use App\Entity\Vocabulary;
 use App\Entity\Guess;
 
 use App\Utils\Table;
 
+/* 
+* 
+*/
 class VocabularyController extends AbstractController
 {
   public function setDefaultSession(SessionInterface $session)
@@ -39,6 +43,7 @@ class VocabularyController extends AbstractController
   /**
   * @Route("/random")
   * @Route("/")
+  * @IsGranted("ROLE_USER")
   */
   public function random(SessionInterface $session)
   {
@@ -127,6 +132,7 @@ class VocabularyController extends AbstractController
 
   /** 
   * @Route("/a2bok/{id}")
+  * @IsGranted("ROLE_USER")
   */
   public function a2bok($id)
   {
@@ -145,6 +151,7 @@ class VocabularyController extends AbstractController
 
   /** 
   * @Route("/a2bko/{id}")
+  * @IsGranted("ROLE_USER")
   */
   public function a2bko($id)
   {
@@ -163,6 +170,7 @@ class VocabularyController extends AbstractController
 
   /** 
   * @Route("/b2aok/{id}")
+  * @IsGranted("ROLE_USER")
   */
   public function b2aok($id)
   {
@@ -181,6 +189,7 @@ class VocabularyController extends AbstractController
 
   /** 
   * @Route("/b2ako/{id}")
+  * @IsGranted("ROLE_USER")
   */
   public function b2ako($id)
   {
@@ -199,6 +208,7 @@ class VocabularyController extends AbstractController
 
   /**
   * @Route("/setSort/{mode}")
+  * @IsGranted("ROLE_USER")
   */
   public function setSort($mode, SessionInterface $session)
   {
@@ -208,6 +218,7 @@ class VocabularyController extends AbstractController
 
  /**
   * @Route("/setLang/{lang}")
+  * @IsGranted("ROLE_USER")
   */
   public function setLang($lang)
   {
@@ -218,6 +229,7 @@ class VocabularyController extends AbstractController
 
   /**
   * @Route("/stats")
+  * @IsGranted("ROLE_USER")
   */
   public function stats(SessionInterface $session)
   {

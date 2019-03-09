@@ -216,6 +216,8 @@ class GuessRepository extends ServiceEntityRepository
     $statement->execute();
 
     $result = $statement->fetchAll();
+    if(count($result) == 0)
+      return [];
 
     return $result[0];
   }
