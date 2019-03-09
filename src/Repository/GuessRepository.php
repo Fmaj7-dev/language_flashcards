@@ -126,10 +126,10 @@ class GuessRepository extends ServiceEntityRepository
 
     $em = $this->getEntityManager();
     
-    $query = 'select count(guess.id) as count from guess, vocabulary  
-    where guess.vocabulary_id = vocabulary.id 
-    and guess.user_id = :user 
-    and vocabulary.language_a = :lang';
+    $query = 'SELECT count(guess.id) as count from guess, vocabulary  
+    WHERE guess.vocabulary_id = vocabulary.id 
+    AND guess.user_id = :user 
+    AND vocabulary.language_a = :lang';
     
     $statement = $em->getConnection()->prepare($query);
 
@@ -143,17 +143,17 @@ class GuessRepository extends ServiceEntityRepository
   }
 
   /**
-   * Returns one of words the user knows how to translate from language A to language B
+   * Returns the number of words the user knows how to translate from language A to language B
    */
   public function getKnownA($user_id)
   {
     $em = $this->getEntityManager();
     
-    $query = 'select count(guess.id) as count from guess, vocabulary  
-    where guess.vocabulary_id = vocabulary.id 
-    and guess.a2b_ok > guess.a2b_ko
-    and guess.user_id = :user  
-    and vocabulary.language_a = :lang';
+    $query = 'SELECT count(guess.id) as count from guess, vocabulary  
+    WHERE guess.vocabulary_id = vocabulary.id 
+    AND guess.a2b_ok > guess.a2b_ko
+    AND guess.user_id = :user  
+    AND vocabulary.language_a = :lang';
     
     $statement = $em->getConnection()->prepare($query);
 
@@ -167,17 +167,17 @@ class GuessRepository extends ServiceEntityRepository
   }
 
   /**
-   * Returns one of words the user knows how to translate from language B to language A
+   * Returns the number of words the user knows how to translate from B to A
    */
   public function getKnownB($user_id)
   {
     $em = $this->getEntityManager();
     
-    $query = 'select count(guess.id) as count from guess, vocabulary  
-    where guess.vocabulary_id = vocabulary.id 
-    and guess.b2a_ok > guess.b2a_ko
-    and guess.user_id = :user  
-    and vocabulary.language_a = :lang';
+    $query = 'SELECT count(guess.id) as count FROM guess, vocabulary  
+    WHERE guess.vocabulary_id = vocabulary.id 
+    AND guess.b2a_ok > guess.b2a_ko
+    AND guess.user_id = :user  
+    AND vocabulary.language_a = :lang';
     
     $statement = $em->getConnection()->prepare($query);
 
@@ -201,11 +201,11 @@ class GuessRepository extends ServiceEntityRepository
   {
     $em = $this->getEntityManager();
     
-    $query = 'select v.word_a, v.word_b, g.a2b_ok, g.a2b_ko, g.a2b_ok-g.a2b_ko from guess g, vocabulary v 
-    where g.a2b_ok-g.a2b_ko < 0 
-    and g.vocabulary_id = v.id 
-    and g.user_id = :user 
-    and v.language_a = :lang';
+    $query = 'SELECT v.word_a, v.word_b, g.a2b_ok, g.a2b_ko, g.a2b_ok-g.a2b_ko FROM guess g, vocabulary v 
+    WHERE g.a2b_ok-g.a2b_ko < 0 
+    AND g.vocabulary_id = v.id 
+    AND g.user_id = :user 
+    AND v.language_a = :lang';
     
     $statement = $em->getConnection()->prepare($query);
 
@@ -229,11 +229,11 @@ class GuessRepository extends ServiceEntityRepository
   {
     $em = $this->getEntityManager();
     
-    $query = 'select v.word_b, v.word_a, g.b2a_ok, g.b2a_ko, g.b2a_ok-g.b2a_ko from guess g, vocabulary v 
-    where g.b2a_ok-g.b2a_ko < 0 
-    and g.vocabulary_id = v.id 
-    and g.user_id = :user
-    and v.language_a = :lang';
+    $query = 'SELECT v.word_b, v.word_a, g.b2a_ok, g.b2a_ko, g.b2a_ok-g.b2a_ko FROM guess g, vocabulary v 
+    WHERE g.b2a_ok-g.b2a_ko < 0 
+    AND g.vocabulary_id = v.id 
+    AND g.user_id = :user
+    AND v.language_a = :lang';
     
     $statement = $em->getConnection()->prepare($query);
 
@@ -247,6 +247,26 @@ class GuessRepository extends ServiceEntityRepository
       return [];
 
     return $result[0];
+  }
+  public function getQuestionsAnswered($user_id)
+  {
+    $em = $this->getEntityManager();
+    
+    $query = 'SELECT sum(guess.a2b_ok)+ sum(guess.a2b_ko) + sum(guess.b2a_ok) + sum(guess.b2a_ko) as count FROM guess, vocabulary
+    WHERE guess.vocabulary_id = vocabulary.id
+    AND guess.user_id = :user
+    AND vocabulary.language_a = :lang';
+    
+    $statement = $em->getConnection()->prepare($query);
+
+    // FIXME user & lang are hardcoded
+    $statement->bindValue('user', $user_id);
+    $statement->bindValue('lang', 2);
+    $statement->execute();
+
+    $result = $statement->fetchAll();
+    dump($result);
+    return $result[0]["count"];
   }
 
 }

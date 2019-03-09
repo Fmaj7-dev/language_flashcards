@@ -25,7 +25,7 @@ class VocabularyController extends AbstractController
       $session->set('mode', 'random');
 
     if(!$session->has('langAName'))
-      $session->set('langAName', 'italian');
+      $session->set('langAName', 'french');
 
     if(!$session->has('langBName'))
       $session->set('langBName', 'spanish');   
@@ -41,8 +41,15 @@ class VocabularyController extends AbstractController
   }
 
   /**
+   * @Route("/")
+   */
+public function welcome(SessionInterface $session)
+{
+  return $this->render('welcome.html.twig', []);
+}
+
+  /**
   * @Route("/random")
-  * @Route("/")
   * @IsGranted("ROLE_USER")
   */
   public function random(SessionInterface $session)
@@ -260,6 +267,8 @@ class VocabularyController extends AbstractController
     $stats->appendRow(["Number of words", $count]);
     $stats->appendRow(["Known French words", $knownA." ".$percentageA."%"]);
     $stats->appendRow(["Known Spanish words", $knownB." ".$percentageB."%"]);
+    $stats->appendRow(["Num questions answered", $repository->getQuestionsAnswered($user_id)]);
+    
 
     $stats2 = new Table("French to Spanish", array("French", "Spanish", "ok", "ko", "diff"));
     $rows = $repository->getWorstA2B($user_id);
