@@ -36,6 +36,9 @@ class GuessRepository extends ServiceEntityRepository
 
     $result = $qb->execute();
 
+    if(sizeof($result) == 0)
+      return [];
+      
     $nth_element = rand(1, sizeof($result));
 
     return $result[$nth_element - 1];
@@ -80,6 +83,8 @@ class GuessRepository extends ServiceEntityRepository
     $count = $qb->execute();
 
     $offset = rand( 0, $count[0][1]-1 );
+    if($offset < 0)
+      $offset = 0;
 
     $qb = $this->createQueryBuilder('w')
     ->setMaxResults(1)
@@ -265,7 +270,6 @@ class GuessRepository extends ServiceEntityRepository
     $statement->execute();
 
     $result = $statement->fetchAll();
-    dump($result);
     return $result[0]["count"];
   }
 
