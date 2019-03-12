@@ -87,6 +87,8 @@ class GuessRepository extends ServiceEntityRepository
 
     $qb = $this->createQueryBuilder('w')
     ->setMaxResults(1)
+    ->where('w.user = :user')
+    ->setParameter('user', $user_id)
     ->setFirstResult($offset)
     ->getQuery();
 

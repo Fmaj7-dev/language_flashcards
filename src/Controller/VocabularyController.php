@@ -24,29 +24,45 @@ class VocabularyController extends AbstractController
     if(!$session->has('mode'))
       $session->set('mode', 'random');
 
+    // name of the language the user wants to learn in this session
     if(!$session->has('langAName'))
       $session->set('langAName', 'french');
 
+    // name of the native language of the user
     if(!$session->has('langBName'))
       $session->set('langBName', 'spanish');   
-
-    if(!$session->has('langSelected'))
-      $session->set('langSelected', 'both');
-
+    
+    // id of the language the user wants to learn in this session
     if(!$session->has('langAId'))
       $session->set('langAId', 2);   
     
+    // id of the native language of the user
     if(!$session->has('langBId'))
       $session->set('langBId', 1);   
+
+    // language the user wants the app to ask him about
+    if(!$session->has('langSelected'))
+      $session->set('langSelected', 'both');
+
+    if(!$session->has('categories'))
+    {
+      $categories = [
+        'noun' => true,
+        'verb' => true,
+        'expression' => false
+      ];
+      $session->set('categories', $categories);
+    } 
   }
 
+
   /**
-   * @Route("/")
-   */
-public function welcome(SessionInterface $session)
-{
-  return $this->render('welcome.html.twig', []);
-}
+  * @Route("/")
+  */
+  public function welcome()
+  {
+    return $this->render('welcome.html.twig', []);
+  }
 
   /**
   * @Route("/random")
@@ -135,7 +151,8 @@ public function welcome(SessionInterface $session)
                          'langNotQueryName' => $langNotQueryName,
                          'langSelected' => $langSelected,
                          'langAName' => $langAName,
-                         'langBName' => $langBName]);
+                         'langBName' => $langBName,
+                         'categories' => $session->get('categories')]);
     
   }
 
@@ -152,9 +169,7 @@ public function welcome(SessionInterface $session)
       throw $this->createNotFoundException('No word found for id '.$id);
     }   
 
-    $user_id = $this->getUser()->getId();
-
-    $word->incA2bOk($user_id);
+    $word->incA2bOk();
     $entityManager->flush();
 
     return $this->redirectToRoute('app_vocabulary_random', []);
@@ -173,9 +188,7 @@ public function welcome(SessionInterface $session)
       throw $this->createNotFoundException('No word found for id '.$id);
     }   
 
-    $user_id = $this->getUser()->getId();
-
-    $word->incA2bKo($user_id);
+    $word->incA2bKo();
     $entityManager->flush();
 
     return $this->redirectToRoute('app_vocabulary_random', []);
@@ -194,9 +207,7 @@ public function welcome(SessionInterface $session)
       throw $this->createNotFoundException('No word found for id '.$id);
     }   
 
-    $user_id = $this->getUser()->getId();
-
-    $word->incB2aOk($user_id);
+    $word->incB2aOk();
     $entityManager->flush();
 
     return $this->redirectToRoute('app_vocabulary_random', []);
@@ -215,9 +226,7 @@ public function welcome(SessionInterface $session)
       throw $this->createNotFoundException('No word found for id '.$id);
     }   
 
-    $user_id = $this->getUser()->getId();
-
-    $word->incB2aKo($user_id);
+    $word->incB2aKo();
     $entityManager->flush();
 
     return $this->redirectToRoute('app_vocabulary_random', []);
@@ -241,6 +250,24 @@ public function welcome(SessionInterface $session)
   {
     $session = $this->get('session');
     $session->set('langSelected', $lang);
+    return $this->redirectToRoute('app_vocabulary_random', []);
+  }
+
+  /**
+  * @Route("/setCat/{category}")
+  * @IsGranted("ROLE_USER")
+  */
+  public function setCategory(SessionInterface $session, $category)
+  {
+
+    $categories = $session->get('categories');
+    if($categories[$category] == true)
+      $categories[$category] = false;
+    else
+      $categories[$category] = true;
+
+    $session->set('categories', $categories);
+
     return $this->redirectToRoute('app_vocabulary_random', []);
   }
 

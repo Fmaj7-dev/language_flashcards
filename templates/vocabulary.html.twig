@@ -72,17 +72,35 @@
         onclick="window.location.href='/setLang/langB'">Ask {{langBName|capitalize}}</button>
 
     <h5>Category</h5>
+    
       <button class="button" 
-        {#{%if nounSelected %}  
+        {% if categories.noun == true %} 
           id="selected" 
-        {% endif %} #}
+        {% endif %}
         onclick="window.location.href='/setCat/noun'">Noun</button>
+    
 
+    
       <button class="button" 
-        {#{%if verbSelected %}  
-          id="selected" 
-        {% endif %} #}
-        onclick="window.location.href='/setCat/verb'">Verb</button>  
+      {% if categories.verb == true %} 
+        id="selected" 
+      {% endif %}
+      onclick="window.location.href='/setCat/verb'">Verb</button>  
+    
+      <!--<button class="button" onclick="window.location.href='/setCat/adjective'">Adjective</button>  
+      <button class="button" onclick="window.location.href='/setCat/adverb'">Adverb</button>  
+      <button class="button" onclick="window.location.href='/setCat/pronoun'">Pronoun</button>  
+      <button class="button" onclick="window.location.href='/setCat/preposition'">Preposition</button>  
+      <button class="button" onclick="window.location.href='/setCat/conjunction'">Conjunction</button>  
+      <button class="button" onclick="window.location.href='/setCat/determiner'">Determiner</button>  
+      <button class="button" onclick="window.location.href='/setCat/exclamation'">Exclamation</button>  -->
+    
+      <button class="button" 
+      {% if categories.expression == true %} 
+      id="selected" 
+      {% endif %}
+      onclick="window.location.href='/setCat/expression'">Expression</button>  
+    
   </div>
 </div>
 
