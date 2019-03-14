@@ -12,6 +12,7 @@ use App\Entity\Vocabulary;
 use App\Entity\Guess;
 
 use App\Utils\Table;
+use App\Utils\WordResult;
 
 /* 
 * 
@@ -55,6 +56,36 @@ class VocabularyController extends AbstractController
     } 
   }
 
+  public function getCategoriesAsStr($categories)
+  {
+    $string = '(';
+
+    if( array_key_exists ("noun", $categories) && $categories["noun"]) 
+      $string = $string.'1,';
+    if( array_key_exists ("verb", $categories) && $categories["verb"]) 
+      $string = $string.'2,';
+    if( array_key_exists ("adjective", $categories) && $categories["adjective"]) 
+      $string = $string.'3,';
+    if( array_key_exists ("adverb", $categories) && $categories["adverb"]) 
+      $string = $string.'4,';
+    if( array_key_exists ("pronoun", $categories) && $categories["pronoun"]) 
+      $string = $string.'5,';
+    if( array_key_exists ("preposition", $categories) && $categories["preposition"]) 
+      $string = $string.'6,';
+    if( array_key_exists ("conjunction", $categories) && $categories["conjunction"]) 
+      $string = $string.'7,';
+    if( array_key_exists ("determiner", $categories) && $categories["determiner"]) 
+      $string = $string.'8,';
+    if( array_key_exists ("exclamation", $categories) && $categories["exclamation"]) 
+      $string = $string.'9,';
+    if( array_key_exists ("expression", $categories) && $categories["expression"]) 
+      $string = $string.'10,';
+
+    $string = rtrim($string,',');
+    $string = $string.')';
+
+    return $string;
+  }
 
   /**
   * @Route("/")
@@ -80,8 +111,11 @@ class VocabularyController extends AbstractController
     $langSelected = $session->get('langSelected');   
     $langAName = $session->get('langAName');
     $langBName = $session->get('langBName');
+    $langAId = $session->get('langAId');
+    $categories = $session->get('categories');
 
-    
+    $categoriesStr = $this->getCategoriesAsStr($categories);
+     
     // Actual language for the query (if user selects 'both' we have to choose one)
     $langQuery = $langSelected;
     if($langSelected == 'both')
@@ -89,40 +123,25 @@ class VocabularyController extends AbstractController
     else
       $langQuery = 'langB';
       
-    if($mode == "worst")
-    {
-      $guess = $repository->findOneOfTheWorsts(1, $langQuery, $user_id);
-    }
-    else if($mode == "random")
-    {
-      $guess = $repository->findOneRandom($user_id);
-    }
-    else if($mode == "unknown")
-    {
-      $guess = $repository->findOneOfTheUnknown(1, $langQuery, $user_id);
-    }
-    else
-    {
-      return ("mode not set");
-    }
-    $vocabulary = $guess->getVocabulary();
+    $limit = 1;
 
-    
-    // variables to pass to the template
+    if($mode == "worst")
+      $guess = $repository->findOneOfTheWorsts($limit, $langQuery, $user_id, $langAId, $categoriesStr);
+    else if($mode == "random")
+      $guess = $repository->findOneRandom($user_id, $langAId, $categoriesStr);
+    else if($mode == "unknown")
+      $guess = $repository->findOneOfTheUnknown($limit, $langQuery, $user_id, $langAId, $categoriesStr);
+    else
+      return ("mode not set");
+    //$vocabulary = $guess->getVocabulary();
+    dump($guess);
+
     if($langQuery == 'langA')
     {
       // Name of the language of the question
       $langQueryName = $langAName;
       // Name of the language of the answer
       $langNotQueryName = $langBName;
-      // Word asked
-      $wordQuestioned = $vocabulary->getWordA($user_id);
-      // response
-      $wordAnswered = $vocabulary->getWordB($user_id);
-      // link ok
-      $linkOk = 'a2bok';
-      // link ko
-      $linkKo = 'a2bko';
     }
     else
     {
@@ -130,16 +149,44 @@ class VocabularyController extends AbstractController
       $langQueryName = $langBName;
       // Name of the language of the answer
       $langNotQueryName = $langAName;
+    }
+
+    if (!is_object($guess))
+    {
+      return $this->render( 'vocabulary.html.twig', [
+      'mode' => $mode,
+      'langQueryName' => $langQueryName,
+      'langNotQueryName' => $langNotQueryName,
+      'langSelected' => $langSelected,
+      'langAName' => $langAName,
+      'langBName' => $langBName,
+      'categories' => $session->get('categories')] );
+    }
+
+    // variables to pass to the template
+    if($langQuery == 'langA')
+    {
       // Word asked
-      $wordQuestioned = $vocabulary->getWordB($user_id);
+      $wordQuestioned = $guess->getWordA();
       // response
-      $wordAnswered = $vocabulary->getWordA($user_id);
+      $wordAnswered = $guess->getWordB();
+      // link ok
+      $linkOk = 'a2bok';
+      // link ko
+      $linkKo = 'a2bko';
+    }
+    else
+    {
+      // Word asked
+      $wordQuestioned = $guess->getWordB();
+      // response
+      $wordAnswered = $guess->getWordA();
       // link ok
       $linkOk = 'b2aok';
       // link ko
       $linkKo = 'b2ako';
     }
-  
+
     return $this->render('vocabulary.html.twig', 
                         ['wordQuestioned' => $wordQuestioned,
                          'wordAnswered' => $wordAnswered,
@@ -153,7 +200,6 @@ class VocabularyController extends AbstractController
                          'langAName' => $langAName,
                          'langBName' => $langBName,
                          'categories' => $session->get('categories')]);
-    
   }
 
   /** 

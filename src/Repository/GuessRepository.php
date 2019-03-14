@@ -7,6 +7,8 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Doctrine\ORM\Query\Expr\Join;
 
+use App\Utils\WordResult;
+
 /**
  */
 class GuessRepository extends ServiceEntityRepository
@@ -19,9 +21,9 @@ class GuessRepository extends ServiceEntityRepository
   /**
    * Returns one of the worst $n words
    */
-  public function findOneOfTheWorsts($n, $langQuery, $user_id)
+  public function findOneOfTheWorsts($limit, $langQuery, $user_id, $langAId, $categoriesStr)
   {   
-    if($langQuery == 'langA')
+    /*if($langQuery == 'langA')
       $orderBy = 'w.a2bOk - w.a2bKo';
     if($langQuery == 'langB')
       $orderBy = 'w.b2aOk - w.b2aKo';
@@ -41,15 +43,55 @@ class GuessRepository extends ServiceEntityRepository
       
     $nth_element = rand(1, sizeof($result));
 
-    return $result[$nth_element - 1];
+    dump($result[$nth_element - 1]);
+    return $result[$nth_element - 1];*/
+
+    if($langQuery == 'langA')
+      $orderBy = 'g.a2b_ok - g.a2b_ko';
+    if($langQuery == 'langB')
+      $orderBy = 'g.b2a_ok - g.b2a_ko';
+
+    $qb = $this->createQueryBuilder('g');
+    $em = $this->getEntityManager();
+
+    $categoryCondition = "";
+    if(strlen($categoriesStr) > 2)
+      $categoryCondition = ' and vc.category_id in '.$categoriesStr.' ';
+
+    // query
+    $query = 'SELECT g.id, v.word_a, v.word_b
+    FROM guess g, vocabulary v, vocabulary_category vc
+    WHERE g.user_id = :user
+    and g.vocabulary_id = v.id
+    and v.id = vc.vocabulary_id
+    and v.language_a = :lang'.$categoryCondition.
+    ' ORDER BY '.$orderBy.' ASC LIMIT '.$limit;
+
+    $statement = $em->getConnection()->prepare($query);
+
+    $statement->bindValue('user', $user_id);
+    $statement->bindValue('lang', $langAId);
+    
+    $statement->execute();
+    $result = $statement->fetchAll();
+
+    // check size
+    if(count($result) == 0)
+      return [];
+
+    // choose one random result
+    $nth_element = rand(1, sizeof($result));
+    $word_result = new WordResult( $result[$nth_element-1] );
+
+    return $word_result;
   }
 
   /**
    * Returns one of the most unknown $n words
    */
-  public function findOneOfTheUnknown($n, $langQuery, $user_id)
+  public function findOneOfTheUnknown($limit, $langQuery, $user_id, $langAId, $categoriesStr)
   {   
-    if($langQuery == 'langA')
+    /*if($langQuery == 'langA')
       $orderBy = 'w.a2bOk + w.a2bKo';
     if($langQuery == 'langB')
       $orderBy = 'w.b2aOk + w.b2aKo';
@@ -65,15 +107,53 @@ class GuessRepository extends ServiceEntityRepository
 
     $nth_element = rand(1, sizeof($result));
 
-    return $result[$nth_element - 1];
+    return $result[$nth_element - 1];*/
+    if($langQuery == 'langA')
+      $orderBy = 'g.a2b_ok + g.a2b_ko';
+    if($langQuery == 'langB')
+      $orderBy = 'g.b2a_ok + g.b2a_ko';
+
+    $qb = $this->createQueryBuilder('g');
+    $em = $this->getEntityManager();
+
+    $categoryCondition = "";
+    if(strlen($categoriesStr) > 2)
+      $categoryCondition = ' and vc.category_id in '.$categoriesStr.' ';
+
+    // query
+    $query = 'SELECT g.id, v.word_a, v.word_b
+    FROM guess g, vocabulary v, vocabulary_category vc
+    WHERE g.user_id = :user
+    and g.vocabulary_id = v.id
+    and v.id = vc.vocabulary_id
+    and v.language_a = :lang'.$categoryCondition.
+    ' ORDER BY '.$orderBy.' ASC LIMIT '.$limit;
+
+    $statement = $em->getConnection()->prepare($query);
+
+    $statement->bindValue('user', $user_id);
+    $statement->bindValue('lang', $langAId);
+    
+    $statement->execute();
+    $result = $statement->fetchAll();
+
+    // check size
+    if(count($result) == 0)
+      return [];
+
+    // choose one random result
+    $nth_element = rand(1, sizeof($result));
+    $word_result = new WordResult( $result[$nth_element-1] );
+
+    return $word_result;
   }
 
   /**
    * Returns one random word
    */
-  public function findOneRandom($user_id)
+  public function findOneRandom( $user_id, $langAId, $categoriesStr )
   {
-    $qb = $this->createQueryBuilder('c')
+    /*$qb = $this->createQueryBuilder('c')
                 ->select('count(c.id)')
                 ->where('c.user = :user')
                 ->setParameter('user', $user_id)
@@ -96,7 +176,40 @@ class GuessRepository extends ServiceEntityRepository
 
     $nth_element = rand(1, sizeof($result));
 
-    return $result[$nth_element - 1];
+    return $result[$nth_element - 1];*/
+
+    $qb = $this->createQueryBuilder('g');
+    $em = $this->getEntityManager();
+
+    $categoryCondition = "";
+    if(strlen($categoriesStr) > 2)
+      $categoryCondition = ' and vc.category_id in '.$categoriesStr.' ';
+
+    // query
+    $query = 'SELECT g.id, v.word_a, v.word_b
+    FROM guess g, vocabulary v, vocabulary_category vc
+    WHERE g.user_id = :user
+    and g.vocabulary_id = v.id
+    and v.id = vc.vocabulary_id
+    and v.language_a = :lang'.$categoryCondition;
+
+    $statement = $em->getConnection()->prepare($query);
+
+    $statement->bindValue('user', $user_id);
+    $statement->bindValue('lang', $langAId);
+    
+    $statement->execute();
+    $result = $statement->fetchAll();
+
+    // check size
+    if(count($result) == 0)
+      return [];
+
+    // choose one random result
+    $nth_element = rand(1, sizeof($result));
+    $word_result = new WordResult( $result[$nth_element-1] );
+
+    return $word_result;
   }
 
   /**

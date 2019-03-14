@@ -10,6 +10,7 @@
 
 <div class="row">
   <div class="main">
+  {% if wordQuestioned is defined %}
     <h2>Question</h2>
     <div id='origin'> <b>{{langQueryName|capitalize}}:</b> {{wordQuestioned}}</div>
     <div id='reverse' style='visibility: hidden;'><b> {{langNotQueryName|capitalize}}:</b> {{wordAnswered}}</div>
@@ -29,6 +30,12 @@
 
     <button class="correct_button" onclick="window.location.href='{{linkOk}}/{{id}}'">Correct</button>
     <button class="wrong_button" onclick="window.location.href='{{linkKo}}/{{id}}'">Wrong</button>
+    {% else %}
+    <div id='origin'>
+      Sorry, there are no results in the database that match your query.
+      Try to change the category selected.
+      </div>
+    {% endif %}
   </div>
 
   <div class="side">
