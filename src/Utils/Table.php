@@ -42,7 +42,7 @@ class Table
 
     public function setRows($rows)
     {
-        $this->data[] = $rows;
+        $this->data = $rows;
     }
 }
 

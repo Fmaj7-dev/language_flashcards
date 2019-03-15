@@ -342,7 +342,6 @@ class VocabularyController extends AbstractController
     $stats->appendRow(["Known Spanish words", $knownB." ".$percentageB."%"]);
     $stats->appendRow(["Num questions answered", $repository->getQuestionsAnswered($user_id)]);
     
-
     $stats2 = new Table("French to Spanish", array("French", "Spanish", "ok", "ko", "diff"));
     $rows = $repository->getWorstA2B($user_id);
     $stats2->setRows($rows);

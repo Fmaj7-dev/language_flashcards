@@ -300,7 +300,8 @@ class GuessRepository extends ServiceEntityRepository
     WHERE g.a2b_ok-g.a2b_ko < 0 
     AND g.vocabulary_id = v.id 
     AND g.user_id = :user 
-    AND v.language_a = :lang';
+    AND v.language_a = :lang
+    ORDER by g.a2b_ok-g.a2b_ko';
     
     $statement = $em->getConnection()->prepare($query);
 
@@ -313,7 +314,7 @@ class GuessRepository extends ServiceEntityRepository
     if(count($result) == 0)
       return [];
 
-    return $result[0];
+    return $result;
   }
 
   /**
@@ -328,7 +329,8 @@ class GuessRepository extends ServiceEntityRepository
     WHERE g.b2a_ok-g.b2a_ko < 0 
     AND g.vocabulary_id = v.id 
     AND g.user_id = :user
-    AND v.language_a = :lang';
+    AND v.language_a = :lang
+    ORDER by g.b2a_ok-g.b2a_ko';
     
     $statement = $em->getConnection()->prepare($query);
 
@@ -341,7 +343,7 @@ class GuessRepository extends ServiceEntityRepository
     if(count($result) == 0)
       return [];
 
-    return $result[0];
+    return $result;
   }
   public function getQuestionsAnswered($user_id)
   {
