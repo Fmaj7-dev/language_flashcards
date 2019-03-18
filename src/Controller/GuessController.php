@@ -11,12 +11,4 @@ use App\Entity\Guess;
 
 class GuessController extends AbstractController
 {
-  /**
-  * @Route("/guess")
-  */
-  public function random(SessionInterface $session)
-  {
-    $repository = $this->getDoctrine()->getRepository(Guess::class);
-    $word = $repository->findOneOfTheWorsts(20);
-  }
- }
+}

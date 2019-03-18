@@ -123,7 +123,7 @@ class VocabularyController extends AbstractController
     else
       $langQuery = 'langB';
       
-    $limit = 1;
+    $limit = 20;
 
     if($mode == "worst")
       $guess = $repository->findOneOfTheWorsts($limit, $langQuery, $user_id, $langAId, $categoriesStr);
@@ -134,7 +134,7 @@ class VocabularyController extends AbstractController
     else
       return ("mode not set");
     //$vocabulary = $guess->getVocabulary();
-    dump($guess);
+    //dump($guess);
 
     if($langQuery == 'langA')
     {
