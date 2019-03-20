@@ -23,29 +23,6 @@ class GuessRepository extends ServiceEntityRepository
    */
   public function findOneOfTheWorsts($limit, $langQuery, $user_id, $langAId, $categoriesStr)
   {   
-    /*if($langQuery == 'langA')
-      $orderBy = 'w.a2bOk - w.a2bKo';
-    if($langQuery == 'langB')
-      $orderBy = 'w.b2aOk - w.b2aKo';
-
-
-    $qb = $this->createQueryBuilder('w')
-                ->orderBy($orderBy, 'ASC')
-                ->setMaxResults($n)
-                ->where('w.user = :user')
-                ->setParameter('user', $user_id)
-                ->getQuery();
-
-    $result = $qb->execute();
-
-    if(sizeof($result) == 0)
-      return [];
-      
-    $nth_element = rand(1, sizeof($result));
-
-    dump($result[$nth_element - 1]);
-    return $result[$nth_element - 1];*/
-
     if($langQuery == 'langA')
       $orderBy = 'g.a2b_ok - g.a2b_ko';
     if($langQuery == 'langB')
@@ -91,23 +68,6 @@ class GuessRepository extends ServiceEntityRepository
    */
   public function findOneOfTheUnknown($limit, $langQuery, $user_id, $langAId, $categoriesStr)
   {   
-    /*if($langQuery == 'langA')
-      $orderBy = 'w.a2bOk + w.a2bKo';
-    if($langQuery == 'langB')
-      $orderBy = 'w.b2aOk + w.b2aKo';
-
-    $qb = $this->createQueryBuilder('w')
-                ->orderBy($orderBy, 'ASC')
-                ->setMaxResults($n)
-                ->where('w.user = :user')
-                ->setParameter('user', $user_id)
-                ->getQuery();
-
-    $result = $qb->execute();
-
-    $nth_element = rand(1, sizeof($result));
-
-    return $result[$nth_element - 1];*/
     if($langQuery == 'langA')
       $orderBy = 'g.a2b_ok + g.a2b_ko';
     if($langQuery == 'langB')
@@ -153,31 +113,6 @@ class GuessRepository extends ServiceEntityRepository
    */
   public function findOneRandom( $user_id, $langAId, $categoriesStr )
   {
-    /*$qb = $this->createQueryBuilder('c')
-                ->select('count(c.id)')
-                ->where('c.user = :user')
-                ->setParameter('user', $user_id)
-                ->getQuery();
-    
-    $count = $qb->execute();
-
-    $offset = rand( 0, $count[0][1]-1 );
-    if($offset < 0)
-      $offset = 0;
-
-    $qb = $this->createQueryBuilder('w')
-    ->setMaxResults(1)
-    ->where('w.user = :user')
-    ->setParameter('user', $user_id)
-    ->setFirstResult($offset)
-    ->getQuery();
-
-    $result = $qb->execute();
-
-    $nth_element = rand(1, sizeof($result));
-
-    return $result[$nth_element - 1];*/
-
     $qb = $this->createQueryBuilder('g');
     $em = $this->getEntityManager();
 
@@ -345,6 +280,7 @@ class GuessRepository extends ServiceEntityRepository
 
     return $result;
   }
+  
   public function getQuestionsAnswered($user_id)
   {
     $em = $this->getEntityManager();
@@ -364,5 +300,4 @@ class GuessRepository extends ServiceEntityRepository
     $result = $statement->fetchAll();
     return $result[0]["count"];
   }
-
 }

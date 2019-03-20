@@ -133,8 +133,6 @@ class VocabularyController extends AbstractController
       $guess = $repository->findOneOfTheUnknown($limit, $langQuery, $user_id, $langAId, $categoriesStr);
     else
       return ("mode not set");
-    //$vocabulary = $guess->getVocabulary();
-    //dump($guess);
 
     if($langQuery == 'langA')
     {
@@ -353,8 +351,6 @@ class VocabularyController extends AbstractController
     $tables [] = $stats;
     $tables [] = $stats2;
     $tables [] = $stats3;
-
-    
 
     return $this->render('stats.html.twig', 
                         ['Tables' => $tables]);
