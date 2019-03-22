@@ -8,6 +8,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 use Doctrine\ORM\Query\Expr\Join;
 
 use App\Utils\WordResult;
+use App\Utils\Random;
 
 /**
  */
@@ -23,10 +24,19 @@ class GuessRepository extends ServiceEntityRepository
    */
   public function findOneOfTheWorsts($limit, $langQuery, $user_id, $langAId, $categoriesStr)
   {   
+    // words with equal number of guesses or misses (or worse)
+    $unknown_words = $this->getCount($user_id);
+
     if($langQuery == 'langA')
+    {
       $orderBy = 'g.a2b_ok - g.a2b_ko';
+      $unknown_words -= $this->getKnownA($user_id);
+    }
     if($langQuery == 'langB')
+    {
       $orderBy = 'g.b2a_ok - g.b2a_ko';
+      $unknown_words -= $this->getKnownB($user_id);
+    }
 
     $qb = $this->createQueryBuilder('g');
     $em = $this->getEntityManager();
@@ -42,7 +52,9 @@ class GuessRepository extends ServiceEntityRepository
     and g.vocabulary_id = v.id
     and v.id = vc.vocabulary_id
     and v.language_a = :lang'.$categoryCondition.
-    ' ORDER BY '.$orderBy.' ASC LIMIT '.$limit;
+    ' and '.$orderBy.' <= 0'.
+    ' ORDER BY '.$orderBy.' ASC';
+    //' ORDER BY '.$orderBy.' ASC LIMIT '.$limit;
 
     $statement = $em->getConnection()->prepare($query);
 
@@ -57,8 +69,9 @@ class GuessRepository extends ServiceEntityRepository
       return [];
 
     // choose one random result
-    $nth_element = rand(1, sizeof($result));
-    $word_result = new WordResult( $result[$nth_element-1] );
+    //$nth_element = rand(1, sizeof($result));
+    $nth_element = Random::ExponentialDistribution(0.05, $unknown_words);
+    $word_result = new WordResult( $result[$nth_element] );
 
     return $word_result;
   }
@@ -280,7 +293,7 @@ class GuessRepository extends ServiceEntityRepository
 
     return $result;
   }
-  
+
   public function getQuestionsAnswered($user_id)
   {
     $em = $this->getEntityManager();
