@@ -1,4 +1,4 @@
 ---
 deployment:
   tasks:
-    - /bin/cp -Rf /home/nne3kkrq/repositories/language_flashcards/* /home/nne3kkrq/repositories/quiz.test.com/
+    - /bin/cp -Rf /home/nne3kkrq/repositories/language_flashcards/* /home/nne3kkrq/quiz.fmaj7.com/
