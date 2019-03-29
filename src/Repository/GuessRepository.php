@@ -22,7 +22,7 @@ class GuessRepository extends ServiceEntityRepository
   /**
    * Returns one of the worst $n words
    */
-  public function findOneOfTheWorsts($limit, $langQuery, $user_id, $langAId, $categoriesStr)
+  public function findOneOfTheWorsts($langQuery, $user_id, $langAId, $categoriesStr)
   {   
     // words with equal number of guesses or misses (or worse)
     $unknown_words = $this->getCount($user_id);
@@ -54,7 +54,6 @@ class GuessRepository extends ServiceEntityRepository
     and v.language_a = :lang'.$categoryCondition.
     ' and '.$orderBy.' <= 0'.
     ' ORDER BY '.$orderBy.' ASC';
-    //' ORDER BY '.$orderBy.' ASC LIMIT '.$limit;
 
     $statement = $em->getConnection()->prepare($query);
 

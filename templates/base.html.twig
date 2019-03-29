@@ -21,7 +21,7 @@
 <div class="navbar">
 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
   <a href="/random">Vocabulary</a>
-  <a href="#">Verbs</a>
+  <a href="/verb/random">Verbs</a>
   <a href="/stats">Stats</a>
   <a href="/logout" class="right">Logout</a>
   <a class="right">Logged in as: {{ app.user.name }}</a>
