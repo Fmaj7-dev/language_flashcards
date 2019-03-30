@@ -64,7 +64,7 @@ class VerbController extends AbstractController
     $langAId = $session->get('langAId');
     $categories = $session->get('categories');
 
-    /*$categoriesStr = $this->getCategoriesAsStr($categories);
+    /*
      
     // Actual language for the query (if user selects 'both' we have to choose one)
     $langQuery = $langSelected;
@@ -76,7 +76,7 @@ class VerbController extends AbstractController
     $limit = 20;
 
     if($mode == "worst")
-      $guess = $repository->findOneOfTheWorsts($limit, $langQuery, $user_id, $langAId, $categoriesStr);
+      $guess = $repository->findOneOfTheWorsts(, $langQuery, $user_id, $langAId, $categoriesStr);
     else if($mode == "random")
       $guess = $repository->findOneRandom($user_id, $langAId, $categoriesStr);
     else if($mode == "unknown")
@@ -135,18 +135,19 @@ class VerbController extends AbstractController
       $linkKo = 'b2ako';
     }*/
 
+    $guess = $repository->findOneOfTheWorsts();
+    $linkOk = 'a2bok';
+    $linkKo = 'a2bko';
+    $mode = 'worst';
+
     return $this->render('verb.html.twig', 
-                        ['wordQuestioned' => $wordQuestioned,
-                         'wordAnswered' => $wordAnswered,
-                         'id' => $guess->getId(),
-                         'linkOk' => $linkOk,
-                         'linkKo' => $linkKo,
+                        ['tenseName' => $guess->getTenseName(),
+                         'infinitive' => $guess->getInfinitive(),
+                         'value' => $guess->getValue(),
+                         'id' => $guess->getTenseiGuessId(),
                          'mode' => $mode,
-                         'langQueryName' => $langQueryName,
-                         'langNotQueryName' => $langNotQueryName,
-                         'langSelected' => $langSelected,
-                         'langAName' => $langAName,
-                         'langBName' => $langBName]);
+                         'linkOk' => $linkOk,
+                         'linkKo' => $linkKo]);
   }
 
   /** 
