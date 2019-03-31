@@ -125,7 +125,7 @@ class GuessRepository extends ServiceEntityRepository
    */
   public function findOneRandom( $user_id, $langAId, $categoriesStr )
   {
-    $qb = $this->createQueryBuilder('g');
+    //$qb = $this->createQueryBuilder('g');
     $em = $this->getEntityManager();
 
     $categoryCondition = "";

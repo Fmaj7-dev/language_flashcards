@@ -126,7 +126,7 @@ class VocabularyController extends AbstractController
     $limit = 20;
 
     if($mode == "worst")
-      $guess = $repository->findOneOfTheWorsts($limit, $langQuery, $user_id, $langAId, $categoriesStr);
+      $guess = $repository->findOneOfTheWorsts($langQuery, $user_id, $langAId, $categoriesStr);
     else if($mode == "random")
       $guess = $repository->findOneRandom($user_id, $langAId, $categoriesStr);
     else if($mode == "unknown")

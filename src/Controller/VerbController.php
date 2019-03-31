@@ -57,93 +57,31 @@ class VerbController extends AbstractController
 
     $this->setDefaultSession($session);
 
-    $mode = $session->get('mode');
-    $langSelected = $session->get('langSelected');   
-    $langAName = $session->get('langAName');
-    $langBName = $session->get('langBName');
+    $user_id = $this->getUser()->getId();
     $langAId = $session->get('langAId');
-    $categories = $session->get('categories');
+    $mode = $session->get('mode');
+    
+    $linkOk = 'a2bok';
+    $linkKo = 'a2bko';
 
-    /*
-     
-    // Actual language for the query (if user selects 'both' we have to choose one)
-    $langQuery = $langSelected;
-    if($langSelected == 'both')
-      if(rand(0,1)) $langQuery = 'langA';
-    else
-      $langQuery = 'langB';
-      
-    $limit = 20;
-
+    dump($mode);
+    
     if($mode == "worst")
-      $guess = $repository->findOneOfTheWorsts(, $langQuery, $user_id, $langAId, $categoriesStr);
+      $guess = $repository->findOneOfTheWorsts($user_id, $langAId);
     else if($mode == "random")
-      $guess = $repository->findOneRandom($user_id, $langAId, $categoriesStr);
+      $guess = $repository->findOneRandom($user_id, $langAId);
     else if($mode == "unknown")
-      $guess = $repository->findOneOfTheUnknown($limit, $langQuery, $user_id, $langAId, $categoriesStr);
+      $guess = $repository->findOneOfTheUnknown($user_id, $langAId);
     else
       return ("mode not set");
 
-    if($langQuery == 'langA')
-    {
-      // Name of the language of the question
-      $langQueryName = $langAName;
-      // Name of the language of the answer
-      $langNotQueryName = $langBName;
-    }
-    else
-    {
-      // Name of the language of the question
-      $langQueryName = $langBName;
-      // Name of the language of the answer
-      $langNotQueryName = $langAName;
-    }
-
-    if (!is_object($guess))
-    {
-      return $this->render( 'vocabulary.html.twig', [
-      'mode' => $mode,
-      'langQueryName' => $langQueryName,
-      'langNotQueryName' => $langNotQueryName,
-      'langSelected' => $langSelected,
-      'langAName' => $langAName,
-      'langBName' => $langBName,
-      'categories' => $session->get('categories')] );
-    }
-
-    // variables to pass to the template
-    if($langQuery == 'langA')
-    {
-      // Word asked
-      $wordQuestioned = $guess->getWordA();
-      // response
-      $wordAnswered = $guess->getWordB();
-      // link ok
-      $linkOk = 'a2bok';
-      // link ko
-      $linkKo = 'a2bko';
-    }
-    else
-    {
-      // Word asked
-      $wordQuestioned = $guess->getWordB();
-      // response
-      $wordAnswered = $guess->getWordA();
-      // link ok
-      $linkOk = 'b2aok';
-      // link ko
-      $linkKo = 'b2ako';
-    }*/
-
-    $guess = $repository->findOneOfTheWorsts();
-    $linkOk = 'a2bok';
-    $linkKo = 'a2bko';
-    $mode = 'worst';
+    $value = $guess->getValue();
+    $value = str_replace(",", "<br>", $value);
 
     return $this->render('verb.html.twig', 
                         ['tenseName' => $guess->getTenseName(),
                          'infinitive' => $guess->getInfinitive(),
-                         'value' => $guess->getValue(),
+                         'value' => $value,
                          'id' => $guess->getTenseiGuessId(),
                          'mode' => $mode,
                          'linkOk' => $linkOk,
@@ -156,15 +94,15 @@ class VerbController extends AbstractController
   */
   public function a2bok($id)
   {
-    /*$entityManager = $this->getDoctrine()->getManager();
-    $word = $entityManager->getRepository(Guess::class)->find($id);
+    $entityManager = $this->getDoctrine()->getManager();
+    $tense_guess = $entityManager->getRepository(TenseGuess::class)->find($id);
 
-    if (!$word) {
-      throw $this->createNotFoundException('No word found for id '.$id);
+    if (!$tense_guess) {
+      throw $this->createNotFoundException('No TenseGuess found for id '.$id);
     }   
 
-    $word->incA2bOk();
-    $entityManager->flush();*/
+    $tense_guess->incA2bOk();
+    $entityManager->flush();
 
     return $this->redirectToRoute('app_verb_random', []);
   }
@@ -175,15 +113,15 @@ class VerbController extends AbstractController
   */
   public function a2bko($id)
   {
-    /*$entityManager = $this->getDoctrine()->getManager();
-    $word = $entityManager->getRepository(Guess::class)->find($id);
+    $entityManager = $this->getDoctrine()->getManager();
+    $tense_guess = $entityManager->getRepository(TenseGuess::class)->find($id);
 
-    if (!$word) {
-      throw $this->createNotFoundException('No word found for id '.$id);
+    if (!$tense_guess) {
+      throw $this->createNotFoundException('No TenseGuess found for id '.$id);
     }   
 
-    $word->incA2bKo();
-    $entityManager->flush();*/
+    $tense_guess->incA2bKo();
+    $entityManager->flush();
 
     return $this->redirectToRoute('app_verb_random', []);
   }
@@ -194,15 +132,15 @@ class VerbController extends AbstractController
   */
   public function b2aok($id)
   {
-    /*$entityManager = $this->getDoctrine()->getManager();
-    $word = $entityManager->getRepository(Guess::class)->find($id);
+    $entityManager = $this->getDoctrine()->getManager();
+    $tense_guess = $entityManager->getRepository(TenseGuess::class)->find($id);
 
-    if (!$word) {
-      throw $this->createNotFoundException('No word found for id '.$id);
+    if (!$tense_guess) {
+      throw $this->createNotFoundException('No TenseGuess found for id '.$id);
     }   
 
-    $word->incB2aOk();
-    $entityManager->flush();*/
+    $tense_guess->incB2aOk();
+    $entityManager->flush();
 
     return $this->redirectToRoute('app_verb_random', []);
   }
@@ -213,15 +151,15 @@ class VerbController extends AbstractController
   */
   public function b2ako($id)
   {
-    /*$entityManager = $this->getDoctrine()->getManager();
-    $word = $entityManager->getRepository(Guess::class)->find($id);
+    $entityManager = $this->getDoctrine()->getManager();
+    $tense_guess = $entityManager->getRepository(TenseGuess::class)->find($id);
 
-    if (!$word) {
-      throw $this->createNotFoundException('No word found for id '.$id);
+    if (!$tense_guess) {
+      throw $this->createNotFoundException('No TenseGuess found for id '.$id);
     }   
 
-    $word->incB2aKo();
-    $entityManager->flush();*/
+    $tense_guess->incB2aKo();
+    $entityManager->flush();
 
     return $this->redirectToRoute('app_verb_random', []);
   }

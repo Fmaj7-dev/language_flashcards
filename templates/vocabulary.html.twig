@@ -12,8 +12,10 @@
   <div class="main">
   {% if wordQuestioned is defined %}
     <h2>Question</h2>
+    <font size="+1">
     <div id='origin'> <b>{{langQueryName|capitalize}}:</b> {{wordQuestioned}}</div>
     <div id='reverse' style='visibility: hidden;'><b> {{langNotQueryName|capitalize}}:</b> {{wordAnswered}}</div>
+    </font>
 
     <script type="text/javascript">
       function show()

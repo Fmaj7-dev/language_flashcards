@@ -124,4 +124,28 @@ class TenseGuess
 
         return $this;
     }
+
+    public function incA2bOk() : self
+    {
+        $this->a2b_ok = $this->a2b_ok+1;
+        return $this;
+    }
+
+    public function incA2bKo() : self
+    {
+        $this->a2b_ko = $this->a2b_ko+1;
+        return $this;
+    }
+
+    public function incB2aOk() : self
+    {
+        $this->b2a_ok = $this->b2a_ok+1;
+        return $this;
+    }
+
+    public function incB2aKo() : self
+    {
+        $this->b2a_ko = $this->b2a_ko+1;
+        return $this;
+    }
 }
