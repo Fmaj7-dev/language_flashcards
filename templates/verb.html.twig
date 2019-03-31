@@ -13,10 +13,9 @@
   {% if infinitive is defined %}
     <h2>Question</h2>
     <font size="+1">
-    <div id='origin'> <b>{{tenseName|capitalize}}:</b> {{infinitive}}</div>
-    
-    <!--<div id='reverse' style='visibility: hidden;'>{{value|replace({', ': '<br>', ',':'\n'})}}</div>-->
-    <div id='reverse' style='visibility: hidden;'><br>{{value|raw}}</div>
+      <div id='origin'> <b>{{tenseName|capitalize}}:</b> {{infinitive}}</div>
+      <!--<div id='reverse' style='visibility: hidden;'>{{value|replace({', ': '<br>', ',':'\n'})}}</div>-->
+      <div id='reverse' style='visibility: hidden;'><br>{{value|raw}}</div>
     </font>
 
     <script type="text/javascript">
