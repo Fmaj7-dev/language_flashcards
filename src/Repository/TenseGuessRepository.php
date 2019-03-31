@@ -24,8 +24,6 @@ class TenseGuessRepository extends ServiceEntityRepository
 
     public function findOneOfTheWorsts($user_id, $lang_id)
     {
-        dump("finding the worsts");
-
         $unknown_verbs = $this->getUnknownVerbs($user_id, $lang_id);
 
         // return $verb_result;
@@ -86,7 +84,6 @@ class TenseGuessRepository extends ServiceEntityRepository
 
     public function findOneOfTheUnknown($user_id, $lang_id)
     { 
-        dump("finding the unknown");
         $em = $this->getEntityManager();
 
         // query
@@ -120,7 +117,6 @@ class TenseGuessRepository extends ServiceEntityRepository
 
     public function findOneRandom($user_id, $lang_id)
     {
-        dump("finding the random");
         $em = $this->getEntityManager();
 
         // query

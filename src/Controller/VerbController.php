@@ -64,8 +64,6 @@ class VerbController extends AbstractController
     $linkOk = 'a2bok';
     $linkKo = 'a2bko';
 
-    dump($mode);
-    
     if($mode == "worst")
       $guess = $repository->findOneOfTheWorsts($user_id, $langAId);
     else if($mode == "random")
