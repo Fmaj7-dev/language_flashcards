@@ -48,6 +48,7 @@ class VerbController extends AbstractController
 
   /**
   * @Route("/verb/random")
+  * @IsGranted("ROLE_USER")
   */
   public function random(SessionInterface $session)
   {
