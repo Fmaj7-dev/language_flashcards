@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}TenseName index{% endblock %}
+
+{% block body %}
+    <h1>TenseName index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for tense_name in tense_names %}
+            <tr>
+                <td>{{ tense_name.id }}</td>
+                <td>{{ tense_name.name }}</td>
+                <td>
+                    <a href="{{ path('tense_name_show', {'id': tense_name.id}) }}">show</a>
+                    <a href="{{ path('tense_name_edit', {'id': tense_name.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('tense_name_new') }}">Create new</a>
+{% endblock %}

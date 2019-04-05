@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New TenseName{% endblock %}
+
+{% block body %}
+    <h1>Create new TenseName</h1>
+
+    {{ include('tense_name/_form.html.twig') }}
+
+    <a href="{{ path('tense_name_index') }}">back to list</a>
+{% endblock %}

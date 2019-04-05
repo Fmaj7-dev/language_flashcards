@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Backend{% endblock %}
+
+{% block body %}
+    <h1>Backend index</h1>
+
+    <a href="{{ path('language_index' ) }}">Languages Management</a>
+    <br>
+    <a href="{{ path('tense_name_index' ) }}">Tenses Management</a>
+{% endblock %}

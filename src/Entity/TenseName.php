@@ -25,7 +25,7 @@ class TenseName
      * @ORM\ManyToOne(targetEntity="App\Entity\Language")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $language_id;
+    private $language;
 
     public function getId(): ?int
     {
