@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Vocabulary index{% endblock %}
+
+{% block body %}
+    <h1>Vocabulary index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>WordA</th>
+                <th>WordB</th>
+                <th>Level</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for vocabulary in vocabularies %}
+            <tr>
+                <td>{{ vocabulary.id }}</td>
+                <td>{{ vocabulary.wordA }}</td>
+                <td>{{ vocabulary.wordB }}</td>
+                <td>{{ vocabulary.level }}</td>
+                <td>
+                    <a href="{{ path('vocabulary_show', {'id': vocabulary.id}) }}">show</a>
+                    <a href="{{ path('vocabulary_edit', {'id': vocabulary.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('vocabulary_new') }}">Create new</a>
+{% endblock %}

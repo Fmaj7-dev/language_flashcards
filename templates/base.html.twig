@@ -23,6 +23,9 @@
   <a href="/random">Vocabulary</a>
   <a href="/verb/random">Verbs</a>
   <a href="/stats">Stats</a>
+    {% if is_granted('ROLE_ADMIN') %}
+      <a href="/backend">Backend</a>
+    {% endif %}
   <a href="/logout" class="right">Logout</a>
   <a class="right">Logged in as: {{ app.user.name }}</a>
 </div>
