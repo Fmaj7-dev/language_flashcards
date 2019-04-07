@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tense{% endblock %}
+
+{% block body %}
+    <h1>Tense</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ tense.id }}</td>
+            </tr>
+            <tr>
+                <th>Value</th>
+                <td>{{ tense.value }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('tense_index') }}">back to list</a>
+
+    <a href="{{ path('tense_edit', {'id': tense.id}) }}">edit</a>
+
+    {{ include('tense/_delete_form.html.twig') }}
+{% endblock %}

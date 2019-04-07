@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tense index{% endblock %}
+
+{% block body %}
+    <h1>Tense index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Value</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for tense in tenses %}
+            <tr>
+                <td>{{ tense.id }}</td>
+                <td>{{ tense.value }}</td>
+                <td>
+                    <a href="{{ path('tense_show', {'id': tense.id}) }}">show</a>
+                    <a href="{{ path('tense_edit', {'id': tense.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('tense_new') }}">Create new</a>
+{% endblock %}

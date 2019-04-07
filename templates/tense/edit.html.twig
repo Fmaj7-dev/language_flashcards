@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Tense{% endblock %}
+
+{% block body %}
+    <h1>Edit Tense</h1>
+
+    {{ include('tense/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('tense_index') }}">back to list</a>
+
+    {{ include('tense/_delete_form.html.twig') }}
+{% endblock %}

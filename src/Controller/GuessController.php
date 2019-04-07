@@ -216,7 +216,7 @@ class GuessController extends AbstractController
     $word->incA2bOk();
     $entityManager->flush();
 
-    return $this->redirectToRoute('app_vocabulary_random', []);
+    return $this->redirectToRoute('app_guess_random', []);
   }
 
   /** 
@@ -235,7 +235,7 @@ class GuessController extends AbstractController
     $word->incA2bKo();
     $entityManager->flush();
 
-    return $this->redirectToRoute('app_vocabulary_random', []);
+    return $this->redirectToRoute('app_guess_random', []);
   }
 
   /** 
@@ -254,7 +254,7 @@ class GuessController extends AbstractController
     $word->incB2aOk();
     $entityManager->flush();
 
-    return $this->redirectToRoute('app_vocabulary_random', []);
+    return $this->redirectToRoute('app_guess_random', []);
   }
 
   /** 
@@ -273,7 +273,7 @@ class GuessController extends AbstractController
     $word->incB2aKo();
     $entityManager->flush();
 
-    return $this->redirectToRoute('app_vocabulary_random', []);
+    return $this->redirectToRoute('app_guess_random', []);
   }
 
   /**
@@ -283,7 +283,7 @@ class GuessController extends AbstractController
   public function setSort($mode, SessionInterface $session)
   {
     $session->set('mode', $mode);
-    return $this->redirectToRoute('app_vocabulary_random', []);
+    return $this->redirectToRoute('app_guess_random', []);
   }
 
  /**
@@ -294,7 +294,7 @@ class GuessController extends AbstractController
   {
     $session = $this->get('session');
     $session->set('langSelected', $lang);
-    return $this->redirectToRoute('app_vocabulary_random', []);
+    return $this->redirectToRoute('app_guess_random', []);
   }
 
   /**
@@ -312,7 +312,7 @@ class GuessController extends AbstractController
 
     $session->set('categories', $categories);
 
-    return $this->redirectToRoute('app_vocabulary_random', []);
+    return $this->redirectToRoute('app_guess_random', []);
   }
 
   /**
