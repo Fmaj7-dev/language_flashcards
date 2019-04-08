@@ -20,10 +20,10 @@ class Table
         return $this->header;
     }
 
-    public function getNumColumns()
+    /*public function getNumColumns()
     {
         return $this->num_columns;
-    }
+    }*/
 
     public function getData()
     {

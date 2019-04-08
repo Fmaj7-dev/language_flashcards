@@ -1,0 +1,37 @@
+{# templates/category_editor.html.twig #}
+{% extends 'base.html.twig' %}
+{% block title %}Category Editor{% endblock %}
+
+{% block extra_header %}
+<link rel="stylesheet" href="table.css">
+{% endblock %}
+
+{% block body %}
+
+{% for TableGeneral in Tables %}
+
+<h2>{{TableGeneral.title}}</h2>
+<div class="divTable minimalistBlack">
+  <div class="divTableHeading">
+    <div class="divTableRow">
+      {% for item in TableGeneral.header %}
+        <div class="divTableHead">{{item}}</div>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="divTableBody">
+      {% for row in TableGeneral.data %}
+        <div class="divTableRow">
+        {% for cell in row %}
+          <div class="divTableCell">{{cell}}</div>
+        {% endfor %}
+        </div>
+      {% endfor %}
+  </div>
+</div>
+</div>
+<br>
+
+{% endfor %}
+
+{% endblock %}
