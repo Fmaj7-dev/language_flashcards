@@ -304,12 +304,40 @@ class GuessRepository extends ServiceEntityRepository
     
     $statement = $em->getConnection()->prepare($query);
 
-    // FIXME user & lang are hardcoded
+    // FIXME lang is hardcoded
     $statement->bindValue('user', $user_id);
     $statement->bindValue('lang', 2);
     $statement->execute();
 
     $result = $statement->fetchAll();
     return $result[0]["count"];
+  }
+
+  public function getCategories($offset, $size)
+  {
+    $em = $this->getEntityManager();
+    
+    $query = 'SELECT v.id, v.word_a, v.word_b, 
+                (SELECT GROUP_CONCAT( DISTINCT VC.category_id
+                                      ORDER BY VC.category_id ASC
+                                      SEPARATOR \',\')
+                 FROM `category` C, `vocabulary_category`VC 
+                 WHERE C.id = VC.category_id 
+                 AND v.id = VC.vocabulary_id)  as categories
+       
+              FROM `vocabulary` v
+              LIMIT '.$offset.','.strval($offset+$size);
+    
+    $statement = $em->getConnection()->prepare($query);
+
+    // FIXME user & lang are hardcoded
+    $statement->bindValue('lang', 2);
+    $statement->execute();
+
+    $result = $statement->fetchAll();
+    if(count($result) == 0)
+      return [];
+
+    return $result;
   }
 }
