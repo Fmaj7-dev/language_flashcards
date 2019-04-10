@@ -3,7 +3,32 @@
 {% block title %}Category Editor{% endblock %}
 
 {% block extra_header %}
-<link rel="stylesheet" href="table.css">
+<link rel="stylesheet" href="/table.css">
+<link rel="stylesheet" href="/category_editor.js">
+<script>
+function changed(id, cat)
+{
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() 
+  {
+    if (this.readyState == 4 && this.status == 200) 
+    {
+        //do nothing
+    }
+  };
+
+  if (document.getElementById('word_'+id).checked) 
+  {
+    xhttp.open("GET", "/backend/category_editor/add/"+id+"/"+cat, true);
+    xhttp.send();
+  } 
+  else 
+  {
+    xhttp.open("GET", "/backend/category_editor/remove/"+id+"/"+cat, true);
+    xhttp.send();
+  }
+}
+</script>
 {% endblock %}
 
 {% block body %}
@@ -22,9 +47,25 @@
   <div class="divTableBody">
       {% for row in TableGeneral.data %}
         <div class="divTableRow">
-        {% for cell in row %}
-          <div class="divTableCell">{{cell}}</div>
-        {% endfor %}
+        {#{% for cell in row %}#}
+          <div class="divTableCell">{{row.word_a}}</div>
+          <div class="divTableCell">{{row.word_b}}</div>
+
+          {# How can I use a for loop for this? #}
+          <div class="divTableCell"> <input type="checkbox" id="word_{{row.id}}" {% if row.1 %} checked {% endif %} onclick="changed({{row.id}}, 1);">  </div>
+          <div class="divTableCell"> <input type="checkbox" id="word_{{row.id}}" {% if row.2 %} checked {% endif %} onclick="changed({{row.id}}, 2);">  </div>
+          <div class="divTableCell"> <input type="checkbox" id="word_{{row.id}}" {% if row.3 %} checked {% endif %} onclick="changed({{row.id}}, 3);">  </div>
+          <div class="divTableCell"> <input type="checkbox" id="word_{{row.id}}" {% if row.4 %} checked {% endif %} onclick="changed({{row.id}}, 4);">  </div>
+          <div class="divTableCell"> <input type="checkbox" id="word_{{row.id}}" {% if row.5 %} checked {% endif %} onclick="changed({{row.id}}, 5);">  </div>
+          <div class="divTableCell"> <input type="checkbox" id="word_{{row.id}}" {% if row.6 %} checked {% endif %} onclick="changed({{row.id}}, 6);">  </div>
+          <div class="divTableCell"> <input type="checkbox" id="word_{{row.id}}" {% if row.7 %} checked {% endif %} onclick="changed({{row.id}}, 7);">  </div>
+          <div class="divTableCell"> <input type="checkbox" id="word_{{row.id}}" {% if row.8 %} checked {% endif %} onclick="changed({{row.id}}, 8);">  </div>
+          <div class="divTableCell"> <input type="checkbox" id="word_{{row.id}}" {% if row.9 %} checked {% endif %} onclick="changed({{row.id}}, 9);">  </div>
+          <div class="divTableCell"> <input type="checkbox" id="word_{{row.id}}" {% if row.10 %} checked {% endif %} onclick="changed({{row.id}}, 10);">  </div>
+          
+          
+
+        {#{% endfor %}#}
         </div>
       {% endfor %}
   </div>
@@ -33,5 +74,11 @@
 <br>
 
 {% endfor %}
+
+{% if prev_offset >= 0 %}
+    <a href="{{ path('category_editor', {offset: prev_offset, size: size} ) }}">Prev</a>
+    <br>
+{% endif %}
+<a href="{{ path('category_editor', {offset: next_offset, size: size} ) }}">Next</a>
 
 {% endblock %}

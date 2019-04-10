@@ -326,7 +326,7 @@ class GuessRepository extends ServiceEntityRepository
                  AND v.id = VC.vocabulary_id)  as categories
        
               FROM `vocabulary` v
-              LIMIT '.$offset.','.strval($offset+$size);
+              LIMIT '.$offset.','.$size;
     
     $statement = $em->getConnection()->prepare($query);
 
@@ -339,5 +339,48 @@ class GuessRepository extends ServiceEntityRepository
       return [];
 
     return $result;
+  }
+
+  public function makeSureItExists( $word, $cat )
+  {
+    $em = $this->getEntityManager();
+    
+    $query = 'SELECT id from `vocabulary_category` VC 
+              WHERE VC.vocabulary_id = :word 
+              AND VC.category_id = :cat';
+
+    $statement = $em->getConnection()->prepare($query);
+
+    $statement->bindValue('word', $word);
+    $statement->bindValue('cat', $cat);
+    $statement->execute();
+
+    $result = $statement->fetchAll();
+    if(empty($result))
+    {
+      $query= 'INSERT INTO `vocabulary_category` (`vocabulary_id`, `category_id`) 
+               VALUES( :word, :cat)';
+
+      $statement = $em->getConnection()->prepare($query);
+
+      $statement->bindValue('word', $word);
+      $statement->bindValue('cat', $cat);
+      $statement->execute();
+    }
+  }
+
+  public function remove( $word, $cat )
+  {
+    $em = $this->getEntityManager();
+    
+    $query= 'DELETE FROM `vocabulary_category`
+             WHERE vocabulary_id = :word
+             AND category_id = :cat';
+
+    $statement = $em->getConnection()->prepare($query);
+
+    $statement->bindValue('word', $word);
+    $statement->bindValue('cat', $cat);
+    $statement->execute();
   }
 }
