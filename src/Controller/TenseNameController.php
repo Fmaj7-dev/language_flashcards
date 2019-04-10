@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
- * @Route("/tense/name")
+ * @Route("/tensename")
  * @IsGranted("ROLE_ADMIN")
  */
 class TenseNameController extends AbstractController

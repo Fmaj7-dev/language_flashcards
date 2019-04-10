@@ -341,6 +341,7 @@ class GuessRepository extends ServiceEntityRepository
     return $result;
   }
 
+  // This should not be here but in VocabularyCategoryRepository
   public function makeSureItExists( $word, $cat )
   {
     $em = $this->getEntityManager();
@@ -369,10 +370,11 @@ class GuessRepository extends ServiceEntityRepository
     }
   }
 
+  // This should not be here but in VocabularyCategoryRepository
   public function remove( $word, $cat )
   {
     $em = $this->getEntityManager();
-    
+
     $query= 'DELETE FROM `vocabulary_category`
              WHERE vocabulary_id = :word
              AND category_id = :cat';
