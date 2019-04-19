@@ -244,7 +244,7 @@ class GuessRepository extends ServiceEntityRepository
     $em = $this->getEntityManager();
     
     $query = 'SELECT v.word_a, v.word_b, g.a2b_ok, g.a2b_ko, g.a2b_ok-g.a2b_ko FROM guess g, vocabulary v 
-    WHERE g.a2b_ok-g.a2b_ko < 0 
+    WHERE g.a2b_ok-g.a2b_ko <= 0 
     AND g.vocabulary_id = v.id 
     AND g.user_id = :user 
     AND v.language_a = :lang
@@ -273,7 +273,7 @@ class GuessRepository extends ServiceEntityRepository
     $em = $this->getEntityManager();
     
     $query = 'SELECT v.word_b, v.word_a, g.b2a_ok, g.b2a_ko, g.b2a_ok-g.b2a_ko FROM guess g, vocabulary v 
-    WHERE g.b2a_ok-g.b2a_ko < 0 
+    WHERE g.b2a_ok-g.b2a_ko <= 0 
     AND g.vocabulary_id = v.id 
     AND g.user_id = :user
     AND v.language_a = :lang
