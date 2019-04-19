@@ -163,4 +163,11 @@
       width:100%;
     }
   }
+
+  @media screen and (max-width: 4000px) {
+    body {
+      max-width:1200px;
+      margin: auto;
+    }
+  }
   
