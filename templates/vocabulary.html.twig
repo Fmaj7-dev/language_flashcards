@@ -4,6 +4,20 @@
 
 {% block extra_header %}
 
+<script type="text/javascript" src="/shortcut.js"></script>
+
+<script>
+    shortcut.add("s", function() {
+        document.getElementById("show_answer").click();
+    });   
+    shortcut.add("c", function() {
+        document.getElementById("correct").click();
+    }); 
+    shortcut.add("w", function() {
+        document.getElementById("wrong").click();
+    }); 
+</script>
+
 {% endblock %}
 
 {% block body %}
@@ -30,8 +44,8 @@
 
     <button id="show_answer" class="show" onclick="show()">Show Answer</button>
 
-    <button class="correct_button" onclick="window.location.href='{{linkOk}}/{{id}}'">Correct</button>
-    <button class="wrong_button" onclick="window.location.href='{{linkKo}}/{{id}}'">Wrong</button>
+    <button id="correct" class="correct_button" onclick="window.location.href='{{linkOk}}/{{id}}'">Correct</button>
+    <button id="wrong" class="wrong_button" onclick="window.location.href='{{linkKo}}/{{id}}'">Wrong</button>
     {% else %}
     <div id='origin'>
       Sorry, there are no results in the database that match your query.
