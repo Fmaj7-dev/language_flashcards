@@ -48,8 +48,8 @@ class GuessController extends AbstractController
     if(!$session->has('categories'))
     {
       $categories = [
-        'noun' => true,
-        'verb' => true,
+        'noun' => false,
+        'verb' => false,
         'expression' => false
       ];
       $session->set('categories', $categories);
