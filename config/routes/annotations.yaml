@@ -1,3 +1,8 @@
 controllers:
     resource: ../../src/Controller/
     type: annotation
+
+rest_controllers:
+    resource: ../../src/RestController/
+    type: annotation
+    prefix: /api
