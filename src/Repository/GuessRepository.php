@@ -145,7 +145,7 @@ class GuessRepository extends ServiceEntityRepository
 
     $statement->bindValue('user', $user_id);
     $statement->bindValue('lang', $langAId);
-    $statement->bindValue('level_', 3);
+    $statement->bindValue('level_', "3");
     
     $statement->execute();
     $result = $statement->fetchAll();
