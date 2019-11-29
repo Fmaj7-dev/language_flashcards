@@ -138,14 +138,12 @@ class GuessRepository extends ServiceEntityRepository
     WHERE g.user_id = :user
     and g.vocabulary_id = v.id
     and v.id = vc.vocabulary_id
-    and v.level = :level_
     and v.language_a = :lang'.$categoryCondition;
 
     $statement = $em->getConnection()->prepare($query);
 
     $statement->bindValue('user', $user_id);
     $statement->bindValue('lang', $langAId);
-    $statement->bindValue('level_', "3");
     
     $statement->execute();
     $result = $statement->fetchAll();
