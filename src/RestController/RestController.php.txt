@@ -1,6 +1,6 @@
 <?php
 
-namespace App\RestController;
+/*namespace App\RestController;
 
 use App\Utils\WordResult;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -11,10 +11,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RestController extends FOSRestController
 {
-  /**
+  **
    * Retrieves an Article resource
    * @Rest\Get("/articles/{articleId}")
-   */
+   *
   public function getArticle(int $articleId): View
   {
     $word = new WordResult;
@@ -24,3 +24,4 @@ class RestController extends FOSRestController
      return $view;
   }
 }
+*/

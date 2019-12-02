@@ -142,6 +142,7 @@ class GuessRepository extends ServiceEntityRepository
 
     $statement = $em->getConnection()->prepare($query);
 
+    
     $statement->bindValue('user', $user_id);
     $statement->bindValue('lang', $langAId);
     
