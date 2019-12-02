@@ -1,6 +1,6 @@
 ---
 deployment:
   tasks:
-    - /bin/cp -Rf /home/nne3kkrq/repositories/language_flashcards3/* /home/nne3kkrq/quiz.fmaj7.com/
+    - /bin/cp -Rf /home/nne3kkrq/repositories/language_flashcards4/* /home/nne3kkrq/quiz.fmaj7.com/
     - php /home/nne3kkrq/quiz.fmaj7.com/bin/console cache:clear --no-warmup --env=prod
     - touch /home/nne3kkrq/quiz.fmaj7.com/et.txt 
