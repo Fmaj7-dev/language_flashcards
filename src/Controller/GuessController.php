@@ -53,7 +53,11 @@ class GuessController extends AbstractController
         'expression' => false
       ];
       $session->set('categories', $categories);
-    } 
+    }
+    
+    // level
+    if(!$session->has('level'))
+      $session->set('level', 0);   
   }
 
   public function getCategoriesAsStr($categories)
@@ -113,7 +117,8 @@ class GuessController extends AbstractController
     $langBName = $session->get('langBName');
     $langAId = $session->get('langAId');
     $categories = $session->get('categories');
-
+    $level = $session->get('level');
+    
     $categoriesStr = $this->getCategoriesAsStr($categories);
      
     // Actual language for the query (if user selects 'both' we have to choose one)
@@ -126,11 +131,11 @@ class GuessController extends AbstractController
     $limit = 20;
 
     if($mode == "worst")
-      $guess = $repository->findOneOfTheWorsts($langQuery, $user_id, $langAId, $categoriesStr);
+      $guess = $repository->findOneOfTheWorsts($langQuery, $user_id, $langAId, $categoriesStr, $level);
     else if($mode == "random")
-      $guess = $repository->findOneRandom($user_id, $langAId, $categoriesStr);
+      $guess = $repository->findOneRandom($user_id, $langAId, $categoriesStr, $level);
     else if($mode == "unknown")
-      $guess = $repository->findOneOfTheUnknown($limit, $langQuery, $user_id, $langAId, $categoriesStr);
+      $guess = $repository->findOneOfTheUnknown($limit, $langQuery, $user_id, $langAId, $categoriesStr, $level);
     else
       return ("mode not set");
 
@@ -158,7 +163,8 @@ class GuessController extends AbstractController
       'langSelected' => $langSelected,
       'langAName' => $langAName,
       'langBName' => $langBName,
-      'categories' => $session->get('categories')] );
+      'categories' => $session->get('categories'),
+      'level' => $level ]);
     }
 
     // variables to pass to the template
@@ -197,7 +203,8 @@ class GuessController extends AbstractController
                          'langSelected' => $langSelected,
                          'langAName' => $langAName,
                          'langBName' => $langBName,
-                         'categories' => $session->get('categories')]);
+                         'categories' => $session->get('categories'),
+                         'level' => $level ]);
   }
 
   /** 
@@ -294,6 +301,17 @@ class GuessController extends AbstractController
   {
     $session = $this->get('session');
     $session->set('langSelected', $lang);
+    return $this->redirectToRoute('app_guess_random', []);
+  }
+
+   /**
+   * @Route("/setLevel/{level}")
+   * @IsGranted("ROLE_USER")
+   */
+  public function setLevel($level)
+  {
+    $session = $this->get('session');
+    $session->set('level', $level);
     return $this->redirectToRoute('app_guess_random', []);
   }
 

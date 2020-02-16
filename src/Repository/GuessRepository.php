@@ -22,7 +22,7 @@ class GuessRepository extends ServiceEntityRepository
   /**
    * Returns one of the worst $n words
    */
-  public function findOneOfTheWorsts($langQuery, $user_id, $langAId, $categoriesStr)
+  public function findOneOfTheWorsts($langQuery, $user_id, $langAId, $categoriesStr, $level = 0)
   {   
     // words with equal number of guesses or misses (or worse)
     $unknown_words = $this->getCount($user_id);
@@ -45,14 +45,21 @@ class GuessRepository extends ServiceEntityRepository
     if(strlen($categoriesStr) > 2)
       $categoryCondition = ' and vc.category_id in '.$categoriesStr.' ';
 
+    $levelCondition = "";
+    if($level != 0)
+    {
+      $levelCondition = ' and v.level = '.$level.' ';
+    }
+
     // query
     $query = 'SELECT g.id, v.word_a, v.word_b
     FROM guess g, vocabulary v, vocabulary_category vc
     WHERE g.user_id = :user
     and g.vocabulary_id = v.id
     and v.id = vc.vocabulary_id
-    and v.level = :level_
-    and v.language_a = :lang'.$categoryCondition.
+    and v.language_a = :lang'.
+    $categoryCondition.
+    $levelCondition.
     ' and '.$orderBy.' <= 0'.
     ' ORDER BY '.$orderBy.' ASC';
 
@@ -60,14 +67,14 @@ class GuessRepository extends ServiceEntityRepository
 
     $statement->bindValue('user', $user_id);
     $statement->bindValue('lang', $langAId);
-    $statement->bindValue('level_', "3");
-    $unknown_words = 1;
     
     $statement->execute();
     $result = $statement->fetchAll();
 
     // check size
-    if(count($result) == 0)
+    $unknown_words = count($result);
+
+    if($unknown_words == 0)
       return [];
 
     // choose one random result
@@ -81,10 +88,11 @@ class GuessRepository extends ServiceEntityRepository
   /**
    * Returns one of the most unknown $n words
    */
-  public function findOneOfTheUnknown($limit, $langQuery, $user_id, $langAId, $categoriesStr)
+  public function findOneOfTheUnknown($limit, $langQuery, $user_id, $langAId, $categoriesStr, $level = 0)
   {   
     if($langQuery == 'langA')
       $orderBy = 'g.a2b_ok + g.a2b_ko';
+
     if($langQuery == 'langB')
       $orderBy = 'g.b2a_ok + g.b2a_ko';
 
@@ -95,13 +103,19 @@ class GuessRepository extends ServiceEntityRepository
     if(strlen($categoriesStr) > 2)
       $categoryCondition = ' and vc.category_id in '.$categoriesStr.' ';
 
+    $levelCondition = "";  
+    if ($level != 0)
+      $levelCondition = ' and v.level = '.$level.' ';
+
     // query
     $query = 'SELECT g.id, v.word_a, v.word_b
     FROM guess g, vocabulary v, vocabulary_category vc
     WHERE g.user_id = :user
     and g.vocabulary_id = v.id
     and v.id = vc.vocabulary_id
-    and v.language_a = :lang'.$categoryCondition.
+    and v.language_a = :lang'.
+    $categoryCondition.
+    $levelCondition.
     ' ORDER BY '.$orderBy.' ASC LIMIT '.$limit;
 
     $statement = $em->getConnection()->prepare($query);
@@ -126,7 +140,7 @@ class GuessRepository extends ServiceEntityRepository
   /**
    * Returns one random word
    */
-  public function findOneRandom( $user_id, $langAId, $categoriesStr )
+  public function findOneRandom( $user_id, $langAId, $categoriesStr, $level = 0 )
   {
     //$qb = $this->createQueryBuilder('g');
     $em = $this->getEntityManager();
@@ -135,13 +149,19 @@ class GuessRepository extends ServiceEntityRepository
     if(strlen($categoriesStr) > 2)
       $categoryCondition = ' and vc.category_id in '.$categoriesStr.' ';
 
+    $levelCondition = "";
+    if ($level != 0)
+      $levelCondition = ' and v.level = '.$level.' ';  
+
     // query
     $query = 'SELECT g.id, v.word_a, v.word_b
     FROM guess g, vocabulary v, vocabulary_category vc
     WHERE g.user_id = :user
     and g.vocabulary_id = v.id
     and v.id = vc.vocabulary_id
-    and v.language_a = :lang'.$categoryCondition;
+    and v.language_a = :lang'.
+    $categoryCondition.
+    $levelCondition;
 
     $statement = $em->getConnection()->prepare($query);
 

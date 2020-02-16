@@ -94,6 +94,26 @@
         {% endif %} 
         onclick="window.location.href='/setLang/langB'">Ask {{langBName|capitalize}}</button>
 
+  <h5>Level</h5>
+    
+      <button class="button" 
+        {% if level == 1 %} 
+          id="selected" 
+        {% endif %}
+        onclick="window.location.href='/setLevel/1'">Level 1</button>
+
+      <button class="button" 
+        {% if level == 2 %} 
+          id="selected" 
+        {% endif %}
+        onclick="window.location.href='/setLevel/2'">Level 2</button>  
+        
+      <button class="button" 
+        {% if level == 3 %} 
+          id="selected" 
+        {% endif %}
+        onclick="window.location.href='/setLevel/3'">Level 3</button>
+
     <h5>Category</h5>
     
       <button class="button" 
